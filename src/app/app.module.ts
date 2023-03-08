@@ -4,13 +4,15 @@ import { AppService } from './app.service';
 // import { UsersModule } from './users/users.module';
 // import { PostsModule } from './users/users.module';UsersModule, PostsModule
 import { LoggerMiddleware} from '../common/middlewares/logger.middleware';
-import { DatabaesModule } from '../configs/database.module';
-import { JobPostController } from './controllers/JobPost.controller';
+import { DatabaseModule } from '../configs/database.module';
+
+import { JobPostModule } from './modules/JobPost.module';
+import { CategoryService } from './services/Category.service';
 
 @Module({
-  imports: [JobPostController, DatabaesModule],
+  imports: [JobPostModule, DatabaseModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, CategoryService],
 })
 
 export class AppModule implements NestModule {
