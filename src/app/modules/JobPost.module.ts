@@ -4,11 +4,11 @@ import { JobPostService } from '../services/JobPost.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JobPostEntity } from '../models/JobPost.entity';
 
+
+//  TypeOrmModule.forFeature([JobPostEntity])
 @Module({
-  imports:[
-    TypeOrmModule.forFeature([JobPostEntity])
-  ],
+  imports:[TypeOrmModule.forFeature([JobPostEntity])],
   controllers: [JobPostController],
   providers: [JobPostService]
 })
-export class PostsModule {}
+export class JobPostModule {}
