@@ -1,12 +1,7 @@
+import { Module } from "@nestjs/common"
+import { TypeOrmModule } from "@nestjs/typeorm"
+//import { DataSource } from "typeorm"
 
-
-
-import { Module } from '@nestjs/common';
-
-
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { JobPostEntity } from 'src/app/models/JobPost.entity';
-import { PostEntity } from 'src/posts/posts.entity';
 
 @Module({
   imports: [
@@ -21,8 +16,9 @@ import { PostEntity } from 'src/posts/posts.entity';
         "src/data/mysql/migrations/*.ts",
         "dist/migrations/*{.ts,.js}"
       ],
-      synchronize: true,
+      synchronize: false
     }),
   ],
 })
-export class DatabaseModule{}
+export class DataBaseModule {}
+        
