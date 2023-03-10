@@ -16,7 +16,7 @@ export  abstract class BaseAbstractRepository<T extends BaseEntity> implements I
         this.entity = entity;
     }
     // public async getAll(): Promise<T> {
-    //     return await this.entity.findAndCount()
+    //     return await this.entity.
     // }
 
     public async save(data: DeepPartial<T>): Promise<T> {
@@ -45,7 +45,7 @@ export  abstract class BaseAbstractRepository<T extends BaseEntity> implements I
     }
 
 
-    public async findAll(options?: FindManyOptions<T>): Promise<T[]> {
+    public async findAllObject(options?: FindManyOptions<T>): Promise<T[]> {
         //throw new Error('Method not implemented.')
         return await this.entity.find(options);
     }

@@ -4,30 +4,32 @@ import { AppService } from './app.service';
 import { LoggerMiddleware} from '../filters/middlewares/logger.middleware';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CategoryModule } from './category/category.module';
+require('dotenv').config()
+import { CategoryEntity } from './category/category.entity';
+import { ValidationPipe } from '@nestjs/common';
+import { APP_PIPE } from '@nestjs/core';
 
 @Module({
   imports: [
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
+    TypeOrmModule.forRoot(
+      {
         type: 'mysql',
-        host: configService.get('DATABASE_HOST'),
-        port: configService.get('DATABASE_PORT'),
-        username: configService.get('DATABASE_USERNAME'),
-        password: configService.get('DATABASE_PASSWORD'),
-        database: configService.get('DATABASE_NAME'),
-        entities: ['dist/**/*.entity{.ts,.js}'],
-        synchronize: true,
-        migrations: ['dist/migrations/*.js'],
-        cli: {
-          migrationsDir: 'src/migrations',
-        },
-      }),
-      inject: [ConfigService],
-    }),
-  ],
+        host: 'localhost',
+        port: 3306,
+        username: 'root',
+        password: null,
+        database: 'freelancerproject-post',
+        entities: [CategoryEntity],
+        synchronize: false, // fix: false -> migration
+      }) ,CategoryModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,
+    // {
+    //   provide: APP_PIPE,
+    //   useClass: ValidationPipe,
+    // }
+  ],
 })
 
 export class AppModule  {// implements NestModule
@@ -40,4 +42,5 @@ export class AppModule  {// implements NestModule
   //       'cats/(.*)',)
   //     .forRoutes({path: 'posts', method: RequestMethod.GET} ); // .forRoutes(CatsController);
   // }
+
 }

@@ -7,7 +7,7 @@ export interface IRepository<T> {
   save(data: DeepPartial<T>): Promise<T>;
   findOneById(id:number): Promise<T>; // number ???
   findByCondition(filterCondition: FindOneOptions<T>): Promise<T>;
-  findAll(options?: FindManyOptions<T>): Promise<T[]>;
+  findAllObject(options?: FindManyOptions<T>): Promise<T[]>;
   preload(data: DeepPartial<T>): Promise<T>;
   updateById(id: EntityId, data: T): Promise<UpdateResult>;
   remove(data: T): Promise<T>;

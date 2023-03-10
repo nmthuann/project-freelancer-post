@@ -1,15 +1,29 @@
-import { Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Req, UsePipes, NestMiddleware } from '@nestjs/common';
+import { CategoryMiddleware } from 'src/middlewares/category.middleware';
+import { TransformPipe } from 'src/pipes/tranform.pipe';
+import { ValidatorPipe } from 'src/pipes/validator.pipe';
+import { CategoryDto } from './category.dto';
 import { CategoryService } from './category.service';
-//import { ICategoryService } from './interfaces/category.interface.service';
+import { Request } from 'express';
 
-@Controller('category')
-export class CategoryController {
+// working with DTO
+@Controller('category') 
+export class CategoryController  {
     constructor(private categoryService: CategoryService){}
-    @Get(':categoryId')
-    async getCategoryById(@Param('categoryId') categoryId) {
-        console.log("test")
-        const list = this.categoryService.getCategoryById(categoryId)
-        console.log(list) ;
-        return list;
+    
+    // @Get()
+    // @NestMiddleware(CategoryMiddleware)
+    // getCategoryById(@Req() req: Request){
+    //     const categories = this.categoryService.getCategories();;
+    //     return { message: 'Success', data: categories};
+    // }
+
+    @Post()
+    @UsePipes(new ValidatorPipe())
+    createCategory(@Body() category: CategoryDto): Promise<CategoryDto>{
+        return this.categoryService.save(category);
     }
 }
+
+
+

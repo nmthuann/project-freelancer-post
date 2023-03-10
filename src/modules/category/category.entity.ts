@@ -1,27 +1,34 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, DeepPartial } from "typeorm"
 
-@Entity({
-    name: 'Categories'
-})
-export class CategoryEntity extends BaseEntity{
-    @PrimaryGeneratedColumn('increment')
-    private category_id: number
+@Entity({name:'Categories'})
+export class CategoryEntity  { //extends BaseEntity
+    @PrimaryGeneratedColumn()
+    category_id: number
 
     @Column({nullable: false})
     category_name: string
 
-    @Column({})
+    @Column()
     description: string
 
-    //@Column({nullable: false, type: 'timestamp' })
-    @CreateDateColumn({nullable: false, default: `now()`,})
+    @CreateDateColumn(
+    {type: 'timestamp',
+        default: () => 'CURRENT_TIMESTAMP'
+    })
     timestamp: Date
 
-    constructor(partial: DeepPartial<CategoryEntity>) {
-        super()
-        Object.assign(this, partial)
-      }
-    
-    
 }
 
+
+
+
+
+
+    // constructor(category_id: number, category_name: string, description: string, timestamp: Date) {
+    //     super(); // Gọi constructor của BaseEntity
+    //     this.category_id = category_id;
+    //     this.category_name = category_name ;
+    //     this.description = description;
+    //     this.timestamp = timestamp;
+    //   }
+    
