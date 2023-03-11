@@ -1,20 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, DeepPartial } from "typeorm"
+import { BaseEntity } from "src/common/base/base.entity"
+import { Entity, PrimaryGeneratedColumn, Column,
+    OneToOne, JoinColumn } from "typeorm"
+import { CategoryEntity } from "../category/category.entity"
 
-@Entity({name:'C    ategoryDetails'})
-export class CategoryEntity  { //extends BaseEntity
+@Entity({name:'CategoryDetails'})
+export class CategoryDetailEntity extends BaseEntity  { //extends BaseEntity
     @PrimaryGeneratedColumn()
-    category_id: number
+    category_detail_id: number
+
+    @OneToOne(() => CategoryEntity)
+    @JoinColumn()
+    category: CategoryEntity
 
     @Column({nullable: false})
-    category_name: string
-
-    @Column()
-    description: string
-
-    @CreateDateColumn(
-    {type: 'timestamp',
-        default: () => 'CURRENT_TIMESTAMP'
-    })
-    timestamp: Date
-
+    category_detial_name: string
 }

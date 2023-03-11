@@ -13,9 +13,9 @@ import { CategoryService } from './category.service';
   providers: [CategoryService]
 })
 export class CategoryModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(CategoryMiddleware)
-      .forRoutes('*');
-  }
+  // configure(consumer: MiddlewareConsumer) {
+  //   consumer
+  //     .apply(CategoryMiddleware)
+  //     .forRoutes('*');
+  // }
 }
