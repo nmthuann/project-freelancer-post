@@ -4,7 +4,7 @@ import { IsString, IsInt } from 'class-validator';
 export class CategoryDto {
     // @Expose()
     // @IsInt()
-    category_id: number
+    //category_id: number
 
     @Expose()
     @IsString()
@@ -14,6 +14,6 @@ export class CategoryDto {
     @IsString()
     description: string
 
-    @Expose()
-    timestamp: Date
+    //@Expose()
+    //timestamp: Date
 }

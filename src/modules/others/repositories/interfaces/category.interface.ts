@@ -1,5 +1,6 @@
-// import { CategoryEntity } from "../";
-// import { IRepository } from "../base/base.interface.repository";
+import { CategoryEntity } from "src/modules/category/category.entity";
+import { Repository } from "typeorm";
+import { IRepository } from "../base/base.interface.repository";
 
-// export interface ICategoryRepository extends IRepository<CategoryEntity>{
-// }
+export interface ICategoryRepository extends Repository<CategoryEntity>{
+}

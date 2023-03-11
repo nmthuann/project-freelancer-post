@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, DeepPartial } from "typeorm"
+import { BaseEntity } from "src/common/base/base.entity"
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, DeepPartial } from "typeorm"
 
 @Entity({name:'Categories'})
-export class CategoryEntity  { //extends BaseEntity
+export class CategoryEntity extends BaseEntity { 
     @PrimaryGeneratedColumn()
     category_id: number
 
@@ -11,11 +12,11 @@ export class CategoryEntity  { //extends BaseEntity
     @Column()
     description: string
 
-    @CreateDateColumn(
-    {type: 'timestamp',
-        default: () => 'CURRENT_TIMESTAMP'
-    })
-    timestamp: Date
+    // @CreateDateColumn(
+    // {type: 'timestamp',
+    //     default: () => 'CURRENT_TIMESTAMP'
+    // })
+    // timestamp: Date
 
 }
 
