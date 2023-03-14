@@ -1,7 +1,7 @@
 import { BaseEntity } from "src/common/base/base.entity"
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, DeepPartial } from "typeorm"
 
-@Entity({name:'Categories'})
+@Entity({name:'TestCategories'})
 export class CategoryEntity extends BaseEntity { 
     @PrimaryGeneratedColumn()
     category_id: number
@@ -12,18 +12,7 @@ export class CategoryEntity extends BaseEntity {
     @Column()
     description: string
 
-    // @CreateDateColumn(
-    // {type: 'timestamp',
-    //     default: () => 'CURRENT_TIMESTAMP'
-    // })
-    // timestamp: Date
-
 }
-
-
-
-
-
 
     // constructor(category_id: number, category_name: string, description: string, timestamp: Date) {
     //     super(); // Gọi constructor của BaseEntity

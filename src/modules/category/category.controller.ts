@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Req, UsePipes, NestMiddleware, HttpCode, HttpStatus } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put,
+     Req, UsePipes, NestMiddleware, HttpCode, HttpStatus } from '@nestjs/common';
 import { CategoryMiddleware } from 'src/middlewares/category.middleware';
 import { TransformPipe } from 'src/pipes/tranform.pipe';
 import { ValidatorPipe } from 'src/pipes/validator.pipe';
@@ -11,36 +12,32 @@ import { Request } from 'express';
 export class CategoryController  {
     constructor(private categoryService: CategoryService){}
 
-    @Get()
-    async getCategory(): Promise<CategoryDto> {
-        return this.categoryService.findOne(1);
-    }
-
-    @Get('categories')
+    @Get('Categories')
     async getCategories(): Promise<CategoryDto[]> {
-        return this.categoryService.findAll();
+        //console.log(this.categoryService.getCategories())
+        return this.categoryService.getCategories();
     }
-
+    
     @Get(':id')
-    async findOne(@Param('id') id: number): Promise<CategoryDto> {
-        return this.categoryService.findOne(id);
+    async getCategory(@Param('id') id: number): Promise<CategoryDto> {
+        return this.categoryService.getByCategoryId(id);
     }
 
     @Post()
     @UsePipes(new ValidatorPipe())
     async create(@Body() category: CategoryDto): Promise<CategoryDto> {
-        return this.categoryService.save(category);
+        return this.categoryService.create(category);
     }
 
     @Put(':id')
     async update(@Param('id') id: number, @Body() categoryDto: CategoryDto,): Promise<CategoryDto> {
-        return this.categoryService.update(id, categoryDto);
+        return this.categoryService.updateCategoryById(id, categoryDto);
     }
 
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
     async delete(@Param('id') id: number): Promise<void> {
-        return this.categoryService.delete(id);
+        console.log(this.categoryService.deleteCategoryById(id));
     }
 }
 
