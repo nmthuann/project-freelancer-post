@@ -1,23 +1,21 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { BaseEntity } from "src/common/base/base.entity"
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm"
+import { CategoryDetailEntity } from "../category-detail/categoryDetail.entity"
 
-@Entity({
-    name: 'JobPost'
-})
-export class JobPostEntity{
+@Entity({name: 'JobPosts'})
+export class JobPostEntity extends BaseEntity{
     @PrimaryGeneratedColumn()
-    post_id: number
+    job_post_id: number
+
+    @OneToOne(() => CategoryDetailEntity)
+    @JoinColumn()
+    category_detail: CategoryDetailEntity
+
+    @Column({nullable: false})
+    job_post_name: string
 
     @Column()
-    categorydetail_id: number
-
-    @Column()
-    post_name: string
-
-    @Column()
-    timestamp: Date
-
-    @Column()
-    vote: Number
+    vote: number
 }
 
 

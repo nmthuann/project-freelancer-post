@@ -9,7 +9,15 @@ require('dotenv').config()
 import { CategoryEntity } from './category/category.entity';
 import { ValidationPipe } from '@nestjs/common';
 import { APP_PIPE } from '@nestjs/core';
+import { MongooseModule } from '@nestjs/mongoose';
+import { ProfileModule } from './profile/profile.module';
+import { PostModule } from './post/post.module';
+import { CategoryDetailModule } from './category-detail/categoryDetail.module';
+import { JobPostDetailModule } from './job-post-detail/jobPostDetail.module';
+import { JobPostModule } from './job-post/jobPost.module';
 
+
+//CategoryModule, CategoryDetailModule, JobPostDetailModule, JobPostModule
 @Module({
   imports: [
     TypeOrmModule.forRoot(
@@ -20,9 +28,11 @@ import { APP_PIPE } from '@nestjs/core';
         username: 'root',
         password: null,
         database: 'freelancerproject-post',
-        entities: [CategoryEntity],
+        entities: [],
         synchronize: false, // fix: false -> migration
-      }) ,CategoryModule],
+      }),
+      MongooseModule.forRoot('mongodb://localhost:27017/UserFiver'), ProfileModule, 
+      ],
   controllers: [AppController],
   providers: [AppService,
     // {

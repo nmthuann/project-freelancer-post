@@ -13,5 +13,5 @@ export class CategoryDetailEntity extends BaseEntity  { //extends BaseEntity
     category: CategoryEntity
 
     @Column({nullable: false})
-    category_detial_name: string
+    category_detail_name: string
 }
