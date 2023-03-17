@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 import { JobPostEntity } from './jobPost.entity';
@@ -11,15 +11,15 @@ export class JobPostService {
         private readonly jobPostRepository: Repository<JobPostEntity>,
       ) {}
     
-        getJobPosts(): Promise<JobPostEntity[]> {
-            return this.jobPostRepository.find();
-        }
+    getJobPosts(): Promise<JobPostEntity[]> {
+        return this.jobPostRepository.find();
+    }
     
         getJobPostById(id: number) {
             return this.jobPostRepository.findOneById(id);
         }
           
-        async createJobPost(jobPostDto: JobPostDto): Promise<JobPostDto> {
+        async createJobPost(jobPostDto: JobPostDto) {
             return this.jobPostRepository.save(jobPostDto);
         }
     
@@ -43,6 +43,13 @@ export class JobPostService {
         //     }
         //     await this.jobPostRepository.delete(category);
         //   }
-    
         }
+        async getLastJobPost(): Promise<JobPostEntity | undefined> {
+            const allJobPosts = await this.jobPostRepository.find();
+            const lastJobPost = allJobPosts[allJobPosts.length - 1];
+            if (!lastJobPost) {
+              throw new NotFoundException(`No JobPostEntity found`);
+            }
+            return lastJobPost;
+          }
 }

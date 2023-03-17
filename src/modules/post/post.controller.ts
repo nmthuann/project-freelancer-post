@@ -1,15 +1,20 @@
 import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
 import { PostService } from './post.service';
 import { PostDto } from './post.dto';
+import { JobPostDetailService } from '../job-post-detail/jobPostDetail.service';
+import { JobPostService } from '../job-post/jobPost.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { JobPostEntity } from '../job-post/jobPost.entity';
+import { Repository } from 'typeorm';
 //import { Post as PostModel } from './interfaces/post.interface';
 
 @Controller('posts')
 export class PostController {
-  constructor(private readonly postService: PostService) {}
-
+    
+  constructor(private readonly postService: PostService,) {}
   @Post()
   async createPost(@Body() postDto: PostDto){
-    console.log(postDto.job_post_detail.profile_name)
+    console.log(postDto.job_post_detail.profile_name, "Create Post Controller!")
     return this.postService.CreatePost(postDto);
   }
 

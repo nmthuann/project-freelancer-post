@@ -3,7 +3,7 @@ import { JobPostEntity } from "../job-post/jobPost.entity";
 
 export class JobPostDetailDto {
 
-    //public readonly  job_post_id: number;
+   // job_post_id: number;
     job_post: JobPostEntity
     profile_id: number;
     description: string;

@@ -22,7 +22,7 @@ export class CategoryService {
         return this.categoryRepository.findOneById(id);
     }
       
-    async create(categoryDto: CategoryDto): Promise<CategoryDto> {
+    async create(categoryDto: CategoryDto) {
         return this.categoryRepository.save(categoryDto);
     }
 

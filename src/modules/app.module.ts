@@ -11,10 +11,14 @@ import { ValidationPipe } from '@nestjs/common';
 import { APP_PIPE } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ProfileModule } from './profile/profile.module';
-import { PostModule } from './post/post.module';
+//dimport { PostModule } from './post/post.module';
 import { CategoryDetailModule } from './category-detail/categoryDetail.module';
 import { JobPostDetailModule } from './job-post-detail/jobPostDetail.module';
 import { JobPostModule } from './job-post/jobPost.module';
+import { CategoryDetailEntity } from './category-detail/categoryDetail.entity';
+import { JobPostDetailEntity } from './job-post-detail/jobPostDetail.entity';
+import { JobPostEntity } from './job-post/jobPost.entity';
+import { PostModule } from './post/post.module';
 
 
 //CategoryModule, CategoryDetailModule, JobPostDetailModule, JobPostModule
@@ -28,11 +32,10 @@ import { JobPostModule } from './job-post/jobPost.module';
         username: 'root',
         password: null,
         database: 'freelancerproject-post',
-        entities: [],
+        entities: [CategoryEntity, CategoryDetailEntity,JobPostEntity, JobPostDetailEntity, ],
         synchronize: false, // fix: false -> migration
-      }),
-      MongooseModule.forRoot('mongodb://localhost:27017/UserFiver'), ProfileModule, 
-      ],
+      }),CategoryModule, CategoryDetailModule,JobPostModule, JobPostDetailModule,
+      MongooseModule.forRoot('mongodb://localhost:27017/UserFiver'),PostModule,],
   controllers: [AppController],
   providers: [AppService,
     // {
