@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
-import { CategoryDetailEntity } from './CategoryDetail.entity';
-import { CategoryDetailDto } from './CategoryDetail.dto';
+import { CategoryDetailEntity } from './categoryDetail.entity';
+import { CategoryDetailDto } from './categoryDetail.dto';
 //import { CategoryDetailRepository } from 'src/common/interfaces/ICategoryDetailRepository'
 import { plainToInstance } from 'class-transformer';
 
@@ -11,6 +11,8 @@ export class CategoryDetailService {
   constructor(
     @InjectRepository(CategoryDetailEntity)
     private readonly categoryDetailRepository: Repository<CategoryDetailEntity>,
+    @InjectRepository(CategoryDetailEntity)
+    private readonly jobPostRepository: Repository<CategoryDetailEntity>,
   ) {}
 
     getCategories(): Promise<CategoryDetailEntity[]> {
@@ -45,6 +47,17 @@ export class CategoryDetailService {
     //     }
     //     await this.CategoryDetailRepository.delete(CategoryDetail);
     //   }
+    }
 
+    async getIdByCategoryDetailName(name: string): Promise<number> {
+      const categoryDetail = await this.categoryDetailRepository.findOneBy({
+        category_detail_name: name ,
+      });
+    
+      if (!categoryDetail) {
+        throw new NotFoundException(`Category detail with name ${name} not found`);
+      }
+    
+      return categoryDetail.category_detail_id;
     }
 }

@@ -25,7 +25,7 @@ export class CategoryController  {
 
     @Post()
     @UsePipes(new ValidatorPipe())
-    async create(@Body() category: CategoryDto): Promise<CategoryDto> {
+    async create(@Body() category: CategoryDto) {
         return this.categoryService.create(category);
     }
 

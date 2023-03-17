@@ -26,7 +26,10 @@ export class Package {
 export class JobPostDetail {
   @Prop()
   profileName: string;
-
+  @Prop()
+  description: string;
+  @Prop()
+  FAQ: string;
   @Prop({ required: true, type: [Package] })
   package: Package[];
 }

@@ -10,35 +10,42 @@ import { Request } from 'express';
 // working with DTO
 @Controller('category-detail') 
 export class CategoryDetailController  {
-   constructor(private CategoryDetailService: CategoryDetailService){}
+   constructor(private categoryDetailService: CategoryDetailService){}
 
    @Get('CategoryDetails')
    async getCategoryDetails(): Promise<CategoryDetailDto[]> {
        //console.log(this.CategoryDetailService.getCategories())
-       return this.CategoryDetailService.getCategories();
+       return this.categoryDetailService.getCategories();
    }
    
+   @Get('name')
+   async getIdByCategoryDetailName(@Param('name') name: string): Promise<number> {
+       return this.categoryDetailService.getIdByCategoryDetailName(name);
+   }
+
    @Get(':id')
    async getCategoryDetailById(@Param('id') id: number): Promise<CategoryDetailDto> {
-       return this.CategoryDetailService.getByCategoryDetailId(id);
+       return this.categoryDetailService.getByCategoryDetailId(id);
    }
 
    @Post()
    @UsePipes(new ValidatorPipe())
-   async createCategoryDetail(@Body() CategoryDetail: CategoryDetailDto): Promise<CategoryDetailDto> {
-       return this.CategoryDetailService.createCategoryDetail(CategoryDetail);
+   async createCategoryDetail(@Body() categoryDetail: CategoryDetailDto): Promise<CategoryDetailDto> {
+       return this.categoryDetailService.createCategoryDetail(categoryDetail);
    }
 
    @Put(':id')
-   async updateCategoryDetailbyId(@Param('id') id: number, @Body() CategoryDetailDto: CategoryDetailDto,): Promise<CategoryDetailDto> {
-       return this.CategoryDetailService.updateCategoryDetailById(id, CategoryDetailDto);
+   async updateCategoryDetailbyId(@Param('id') id: number, @Body() categoryDetailDto: CategoryDetailDto,): Promise<CategoryDetailDto> {
+       return this.categoryDetailService.updateCategoryDetailById(id, categoryDetailDto);
    }
 
    @Delete(':id')
    @HttpCode(HttpStatus.NO_CONTENT)
    async deleteCategoryById(@Param('id') id: number): Promise<void> {
-       console.log(this.CategoryDetailService.deleteCategoryDetailById(id));
+       console.log(this.categoryDetailService.deleteCategoryDetailById(id));
    }
+
+   
 }
 
 
