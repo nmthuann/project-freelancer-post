@@ -18,6 +18,7 @@ import { PackageDto } from './package.dto';
 //import { Post } from './interfaces/post.interface';
 import {PostDto} from './post.dto'
 import { JobPostDetail, Package, Post } from './post.entity';
+import { Update_PostDto } from './update-post.dto';
 
 @Injectable()
 export class PostService {
@@ -29,6 +30,14 @@ export class PostService {
   private jobPostDetailService: JobPostDetailService,
   ) {}
   
+  async getPost(): Promise<Post[]>{
+    try {
+      const posts = await this.postModel.find();
+      return posts;
+    } catch (err) {
+      throw new Error(`Failed to get posts: ${err}`);
+    }
+  }
 
   async CreatePost(postDto: PostDto) {
 
@@ -98,5 +107,55 @@ export class PostService {
     console.log("NoSql done! ", createdPost._id)
     
     return createdPost.save();
+  }
+
+  async UpdatePost(postDto: Update_PostDto): Promise<Update_PostDto>{
+    /**
+     * update theo id
+     * check id đó có tồn tại trong document không?
+     * nếu tồn tại người sửa có phải chủ ID không?
+     * sửa cái thuộc tính sau:   
+     * job_post_id: number;
+     * job_name: string;
+     * categoryDetail: string;
+     * vote: number; (KHỒN)
+     * job_post_detail:
+     * profile_name: string; (KHÔNG)
+     * packages: PackageDto[];
+     * description: string;
+     * FAQ: string;};
+     * sửa ngày updated
+     * không được sửa id, ....
+     *
+     * có tồn tại
+     * sửa ở 2 phía
+     */
+   
+    const check_post = this.postModel.find({jobPostId: postDto.job_post_id},
+       {profileName: postDto.job_post_detail.profile_name});
+    if(!check_post){
+      throw new Error('id hoặc profile không tồn tại !!')
+    }
+    else{
+      
+      // const check_owner = this.postModel.find({jobPostId: postDto.job_post_id},
+      //   {profileName: postDto.job_post_detail.profile_name})
+      // if (!check_owner){
+      //   throw new Error('You arent Owner!!!')
+      // }
+      // else{
+        // phía SQL
+        const update_JP = new JobPostDto();
+        update_JP.job_post_name = postDto.job_name;
+        this.jobPostService.updateJobPost(update_JP);
+
+        const update_JPDetail = new JobPostDetailDto();
+        update_JPDetail.FAQ = postDto.job_post_detail.FAQ;
+        update_JPDetail.description = postDto.job_post_detail.description;
+        this.jobPostDetailService.updateJobPostDetail(update_JPDetail);
+
+        return await this.postModel.findOneAndUpdate(postDto);
+      }
+    //}
   }
 }
