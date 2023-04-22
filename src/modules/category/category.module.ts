@@ -1,6 +1,6 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CategoryMiddleware } from 'src/middlewares/category.middleware';
+import { CategoryMiddleware } from 'src/common/middlewares/category.middleware';
 //import { Categoies } from '../entities/entities/Categoies';
 import { CategoryController } from './category.controller';
 import { CategoryEntity } from './category.entity';

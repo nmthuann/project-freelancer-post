@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Post, Put,
     Req, UsePipes, NestMiddleware, HttpCode, HttpStatus } from '@nestjs/common';
 //import { CategoryDetailMiddleware } from 'src/middlewares/CategoryDetail.middleware';
-import { TransformPipe } from 'src/pipes/tranform.pipe';
-import { ValidatorPipe } from 'src/pipes/validator.pipe';
+import { TransformPipe } from 'src/common/pipes/tranform.pipe';
+import { ValidatorPipe } from 'src/common/pipes/validator.pipe';
 import { CategoryDetailDto } from './categoryDetail.dto';
 import { CategoryDetailService } from './categoryDetail.service';
 import { Request } from 'express';

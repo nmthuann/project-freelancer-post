@@ -13,12 +13,3 @@ export class CategoryEntity extends BaseEntity {
     description: string
 
 }
-
-    // constructor(category_id: number, category_name: string, description: string, timestamp: Date) {
-    //     super(); // Gọi constructor của BaseEntity
-    //     this.category_id = category_id;
-    //     this.category_name = category_name ;
-    //     this.description = description;
-    //     this.timestamp = timestamp;
-    //   }
-    

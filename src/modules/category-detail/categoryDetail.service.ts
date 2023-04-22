@@ -60,4 +60,13 @@ export class CategoryDetailService {
     
       return categoryDetail.category_detail_id;
     }
+
+
+
+
+    // async payment(order: Order): Promise<boolean>{
+
+    //   // đợi kết quả của 
+    //   return true
+    // }
 }
