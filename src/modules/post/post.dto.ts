@@ -32,6 +32,6 @@ export class PostDto {
     packages: PackageDto[];
     description: string;
     FAQ: string;
-  };
+  };  
 }
 

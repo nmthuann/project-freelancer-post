@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Post, Put,
     Req, UsePipes, NestMiddleware, HttpCode, HttpStatus } from '@nestjs/common';
 //import { JobPostDetailMiddleware } from 'src/middlewares/JobPostDetail.middleware';
-import { TransformPipe } from 'src/pipes/tranform.pipe';
-import { ValidatorPipe } from 'src/pipes/validator.pipe';
+import { TransformPipe } from 'src/common/pipes/tranform.pipe';
+import { ValidatorPipe } from 'src/common/pipes/validator.pipe';
 import { JobPostDetailDto } from './jobPostDetail.dto';
 import { JobPostDetailService } from './jobPostDetail.service';
 import { Request } from 'express';

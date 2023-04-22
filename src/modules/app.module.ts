@@ -19,11 +19,26 @@ import { CategoryDetailEntity } from './category-detail/categoryDetail.entity';
 import { JobPostDetailEntity } from './job-post-detail/jobPostDetail.entity';
 import { JobPostEntity } from './job-post/jobPost.entity';
 import { PostModule } from './post/post.module';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 
-//CategoryModule, CategoryDetailModule, JobPostDetailModule, JobPostModule
 @Module({
   imports: [
+    ClientsModule.register([
+      {
+        name: 'USER_SERVICE',
+        transport: Transport.KAFKA,
+        options: {
+          client: {
+            clientId: 'auth',
+            brokers: ['localhost:9092'],
+          },
+          consumer: {
+            groupId: 'user-consumer'
+          }
+        }
+      },
+    ]),
     TypeOrmModule.forRoot(
       {
         type: 'mysql',
@@ -35,7 +50,7 @@ import { PostModule } from './post/post.module';
         entities: [CategoryEntity, CategoryDetailEntity,JobPostEntity, JobPostDetailEntity, ],
         synchronize: false, // fix: false -> migration
       }),CategoryModule, CategoryDetailModule,JobPostModule, JobPostDetailModule,
-      MongooseModule.forRoot('mongodb://localhost:27017/UserFiver'),PostModule,],
+      MongooseModule.forRoot('mongodb://127.0.0.1:27017/UserFiver'),PostModule,],
   controllers: [AppController],
   providers: [AppService,
     // {
