@@ -1,4 +1,4 @@
-import { BaseEntity } from "src/common/base/base.entity"
+import { BaseEntity } from "src/modules/bases/base.entity"
 import { Entity, PrimaryGeneratedColumn, Column,
     OneToOne, JoinColumn } from "typeorm"
 import { CategoryEntity } from "../category/category.entity"

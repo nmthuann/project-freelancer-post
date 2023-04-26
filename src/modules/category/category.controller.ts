@@ -1,53 +1,44 @@
 import { Body, Controller, Delete, Get, Param, Post, Put,
-     Req, UsePipes, NestMiddleware, HttpCode, HttpStatus } from '@nestjs/common';
-import { CategoryMiddleware } from 'src/common/middlewares/category.middleware';
-import { TransformPipe } from 'src/common/pipes/tranform.pipe';
+     Req, UsePipes, NestMiddleware, HttpCode, HttpStatus, Inject } from '@nestjs/common';
 import { ValidatorPipe } from 'src/common/pipes/validator.pipe';
-import { CategoryDto } from './category.dto';
+import { CategoryDto } from './category-dto/category.dto';
 import { CategoryService } from './category.service';
-import { Request } from 'express';
+import { ICategoryService } from './category.interface';
+import { CreateCategoryDto } from './category-dto/create-category.dto';
 
 // working with DTO
 @Controller('category') 
-export class CategoryController  {
-    constructor(private categoryService: CategoryService){}
+export class CategoryController {
+    //private categoryService: ICategoryService;
+    constructor(@Inject('ICategoryService')
+        private categoryService: ICategoryService
+    ) {}
+
+    @Post('create')
+    // @UsePipes(new ValidatorPipe())
+    async createCategory(@Body() category: CreateCategoryDto): Promise<CreateCategoryDto> {
+        return await this.categoryService.create(category);
+    }
+
+    @Put('update/:id')
+    async updateCategoryById(@Param('id') id: number, @Body() categoryDto: CategoryDto): Promise<CategoryDto> {
+        return this.categoryService.updateOneById(id, categoryDto);
+    }
+
+    @Delete('delete/:id')
+    //@HttpCode(HttpStatus.NO_CONTENT)
+    async deleteCategoryById(@Param('id') id: number): Promise<void> {
+        console.log(this.categoryService.deleteOneById(id));
+    }
 
     @Get('Categories')
     async getCategories(): Promise<CategoryDto[]> {
         //console.log(this.categoryService.getCategories())
-        return this.categoryService.getCategories();
+        return await this.categoryService.getAll();
     }
     
     @Get(':id')
     async getCategory(@Param('id') id: number): Promise<CategoryDto> {
-        return this.categoryService.getByCategoryId(id);
-    }
-
-    @Post()
-    @UsePipes(new ValidatorPipe())
-    async create(@Body() category: CategoryDto) {
-        return this.categoryService.create(category);
-    }
-
-    @Put(':id')
-    async update(@Param('id') id: number, @Body() categoryDto: CategoryDto,): Promise<CategoryDto> {
-        return this.categoryService.updateCategoryById(id, categoryDto);
-    }
-
-    @Delete(':id')
-    @HttpCode(HttpStatus.NO_CONTENT)
-    async delete(@Param('id') id: number): Promise<void> {
-        console.log(this.categoryService.deleteCategoryById(id));
+        return await this.categoryService.getOneById(id);
     }
 }
-
-
-
-
-    
-    // @Get()
-    // //@NestMiddleware(CategoryMiddleware)
-    // getCategoryById(@Req() req: Request){
-    //     const categories = this.categoryService.getCategories();
-    //     return { message: 'Success', data: categories};
-    // }

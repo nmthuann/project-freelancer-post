@@ -1,4 +1,4 @@
-import { BaseEntity } from "src/common/base/base.entity"
+import { BaseEntity } from "src/modules/bases/base.entity"
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, OneToMany } from "typeorm"
 import { JobPostEntity } from "../job-post/jobPost.entity"
 

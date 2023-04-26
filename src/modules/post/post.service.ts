@@ -13,7 +13,6 @@ import { JobPostDto } from '../job-post/jobPost.dto';
 import { JobPostEntity } from '../job-post/jobPost.entity';
 import { JobPostService } from '../job-post/jobPost.service';
 import { PackageEntity } from '../package/package.entity';
-import { ProfileEntity } from '../profile/profile.entity';
 import { PackageDto } from './package.dto';
 //import { Post } from './interfaces/post.interface';
 import {PostDto} from './post.dto'
