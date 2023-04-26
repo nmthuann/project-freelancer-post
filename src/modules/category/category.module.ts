@@ -1,21 +1,19 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CategoryMiddleware } from 'src/common/middlewares/category.middleware';
-//import { Categoies } from '../entities/entities/Categoies';
-import { CategoryController } from './category.controller';
-import { CategoryEntity } from './category.entity';
-import { CategoryService } from './category.service';
-
+import { CategoryController } from 'src/modules/category/category.controller';
+import { CategoryEntity } from 'src/modules/category/category.entity';
+import { CategoryService } from 'src/modules/category/category.service';
 
 @Module({
   imports:[TypeOrmModule.forFeature([CategoryEntity])],
   controllers: [CategoryController],
-  providers: [CategoryService]
+  providers: [
+    CategoryService,
+    {
+      provide: 'ICategoryService',
+      useClass: CategoryService,
+    }, 
+  ],
 })
 export class CategoryModule {
-  // configure(consumer: MiddlewareConsumer) {
-  //   consumer
-  //     .apply(CategoryMiddleware)
-  //     .forRoutes('*');
-  // }
 }

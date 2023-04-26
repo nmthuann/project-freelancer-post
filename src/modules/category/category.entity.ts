@@ -1,4 +1,4 @@
-import { BaseEntity } from "src/common/base/base.entity"
+import { BaseEntity } from "src/modules/bases/base.entity"
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, DeepPartial } from "typeorm"
 
 @Entity({name:'Categories'})

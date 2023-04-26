@@ -1,6 +1,6 @@
 import { Expose } from "class-transformer"
 import { IsString, IsInt } from 'class-validator';
-import { CategoryEntity } from "../category/category.entity";
+import { CategoryEntity } from "../../category/category.entity";
 
 export class CategoryDetailDto {
     // @Expose()
