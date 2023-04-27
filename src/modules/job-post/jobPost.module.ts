@@ -3,13 +3,19 @@ import { JobPostController } from './jobPost.controller';
 import { JobPostService } from './jobPost.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JobPostEntity } from './jobPost.entity';
-//import { CategoryDetailEntity } from '../category-detail/CategoryDetail.entity';
+import { CategoryDetailModule } from '../category-detail/categoryDetail.module';
+import { CategoryDetailEntity } from '../category-detail/categoryDetail.entity';
+import { CategoryDetailService } from '../category-detail/categoryDetail.service';
 
-
-//  TypeOrmModule.forFeature([JobPostEntity])
 @Module({
-  imports:[TypeOrmModule.forFeature([JobPostEntity])],
+  imports:[TypeOrmModule.forFeature([JobPostEntity, CategoryDetailEntity]), CategoryDetailModule],
   controllers: [JobPostController],
-  providers: [JobPostService]
+  providers: [
+    {
+      provide: 'IJobPostService',
+      useClass: JobPostService,
+    },
+  ],
+  exports: ['IJobPostService']
 })
 export class JobPostModule {}

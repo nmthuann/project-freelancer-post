@@ -1,48 +1,31 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 import { JobPostDetailEntity } from './jobPostDetail.entity';
-import { JobPostDetailDto } from './jobPostDetail.dto';
+import { JobPostDetailDto } from './job-post-detail-dto/jobPostDetail.dto';
+import { BaseService } from '../bases/base.abstract';
+import { IJobPostDetailService } from './jobPostDetail.service.interface';
+import { IJobPostService } from '../job-post/jobPost.service.interface';
+import { CreateJobPostDetailDto } from './job-post-detail-dto/create-jobPostDetail.dto';
 
 @Injectable()
-export class JobPostDetailService {
+export class JobPostDetailService 
+    extends BaseService<JobPostDetailDto> 
+        implements IJobPostDetailService 
+{
     constructor(
         @InjectRepository(JobPostDetailEntity)
         private readonly jobPostDetailRepository: Repository<JobPostDetailEntity>,
-      ) {}
-    
-        getJobPostDetails(): Promise<JobPostDetailEntity[]> {
-            return this.jobPostDetailRepository.find();
-        }
-    
-        getByJobPostDetailId(id: number) {
-            return this.jobPostDetailRepository.findOneById(id);
-        }
-          
-        async createJobPostDetail(jobPostDetailDto: JobPostDetailDto): Promise<JobPostDetailDto> {
-            return this.jobPostDetailRepository.save(jobPostDetailDto);
-        }
-    
-        async updateJobPostDetail(jobPostDetailDto: JobPostDetailDto): Promise<JobPostDetailDto>{
-            return this.jobPostDetailRepository.preload(jobPostDetailDto);
-        }
-    
-        async updateJobPostDetailById(id: number, jobPostDetailDto: JobPostDetailDto){
-            const cateUpdate = await this.jobPostDetailRepository.findOneById(id);
-            return this.jobPostDetailRepository.save({...cateUpdate, ...jobPostDetailDto});
-        }
-    
-        async deleteJobPostDetailById(id: number): Promise<DeleteResult> {
-            // const deleted = 
-            // console.log(deleted)
-            return this.jobPostDetailRepository.softDelete(id);
-    
-        //     const category = await this.JobPostDetailRepository.findOne(id);
-        //     if (!category) {
-        //       throw new NotFoundException(`Category with id ${id} not found`);
-        //     }
-        //     await this.JobPostDetailRepository.delete(category);
-        //   }
-    
-        }
+        @Inject('IJobPostService')
+        private readonly jobPostService: IJobPostService
+    ) {
+        super(jobPostDetailRepository);
+    }
+
+    // overriding
+    async createOne(data: CreateJobPostDetailDto): Promise<JobPostDetailDto> {
+        const findJobPost = 
+        await this.jobPostService.getOneById(data.job_post.job_post_id);
+        return await this.jobPostDetailRepository.save({...findJobPost, ...data});
+    }
 }

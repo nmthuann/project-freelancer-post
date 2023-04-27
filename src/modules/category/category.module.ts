@@ -8,12 +8,14 @@ import { CategoryService } from 'src/modules/category/category.service';
   imports:[TypeOrmModule.forFeature([CategoryEntity])],
   controllers: [CategoryController],
   providers: [
-    CategoryService,
+    //CategoryService,
     {
       provide: 'ICategoryService',
       useClass: CategoryService,
+      
     }, 
   ],
+  exports: ['ICategoryService']
 })
 export class CategoryModule {
 }

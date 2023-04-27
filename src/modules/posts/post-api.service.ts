@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Client, ClientKafka, Transport } from '@nestjs/microservices';
 
-import { PostDto } from './post.dto';
-import { GetUserNameDto } from './get-useName.dto';
+import { PostDto } from './post-dto/post.dto';
+import { GetUserNameDto } from './post-dto/get-useName.dto';
 
 @Injectable()
 export class AppService {

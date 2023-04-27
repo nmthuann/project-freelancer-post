@@ -1,5 +1,6 @@
 import { BaseEntity } from "src/modules/bases/base.entity"
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, DeepPartial } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, DeepPartial, ManyToOne, OneToMany } from "typeorm"
+import { CategoryDetailEntity } from "../category-detail/categoryDetail.entity"
 
 @Entity({name:'Categories'})
 export class CategoryEntity extends BaseEntity { 
@@ -12,4 +13,7 @@ export class CategoryEntity extends BaseEntity {
     @Column()
     description: string
 
+    @OneToMany(() =>CategoryDetailEntity, (category_detail) => category_detail.category)
+    category_detail: CategoryDetailEntity
 }
+    

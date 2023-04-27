@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
 import { PostService } from './post.service';
-import { PostDto } from './post.dto';
+import { PostDto } from './post-dto/post.dto';
 import { JobPostDetailService } from '../job-post-detail/jobPostDetail.service';
 import { JobPostService } from '../job-post/jobPost.service';
 import { InjectRepository } from '@nestjs/typeorm';

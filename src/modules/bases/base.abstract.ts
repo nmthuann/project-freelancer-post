@@ -2,26 +2,26 @@ import { DeleteResult, Repository } from "typeorm";
 import { IBaseService } from "./base.interface";
 
 export abstract class BaseService<T> implements IBaseService<T>{
-  constructor(private readonly repository: Repository<T>) {}
+  constructor(private readonly baseRepository: Repository<T>) {}
 
   async getAll(): Promise<T[]> {
-    return await this.repository.find();
+    return await this.baseRepository.find();
   }
 
   async getOneById(id: number): Promise<T> {
-    return await this.repository.findOneById(id);
+    return await this.baseRepository.findOneById(id);
   }
 
-  async create(data: T): Promise<T> {
-    return await this.repository.save(data);
+  async createOne(data: T): Promise<T> {
+    return await this.baseRepository.save(data);
   }
 
   async updateOneById(id: number, data: T): Promise<T> {
-    const item = await this.repository.findOneById(id);
-    return this.repository.save({ ...item, ...data });
+    const item = await this.baseRepository.findOneById(id);
+    return await this.baseRepository.save({ ...item, ...data });
   }
 
   async deleteOneById(id: number): Promise<DeleteResult> {
-    return await this.repository.softDelete(id)
+    return await this.baseRepository.softDelete(id)
   }
 }

@@ -6,6 +6,12 @@ import  { CategoryModule } from 'src/modules/category/category.module'
 require('dotenv').config()
 import { CategoryEntity } from 'src/modules/category/category.entity';
 import { MongooseModule } from '@nestjs/mongoose';
+import { CategoryDetailEntity } from './modules/category-detail/categoryDetail.entity';
+import { CategoryDetailModule } from './modules/category-detail/categoryDetail.module';
+import { JobPostEntity } from './modules/job-post/jobPost.entity';
+import { JobPostDetailEntity } from './modules/job-post-detail/jobPostDetail.entity';
+import { JobPostModule } from './modules/job-post/jobPost.module';
+import { JobPostDetailModule } from './modules/job-post-detail/jobPostDetail.module';
 
 @Module({
   imports: [
@@ -32,10 +38,18 @@ import { MongooseModule } from '@nestjs/mongoose';
         username: 'root',
         password: null,
         database: 'freelancerproject-post',
-        entities: [CategoryEntity],// CategoryDetailEntity,JobPostEntity, JobPostDetailEntity,
+        entities: [
+          CategoryEntity, 
+          CategoryDetailEntity,
+          JobPostEntity, 
+          JobPostDetailEntity
+        ],
         synchronize: false, // fix: false -> migration
-      }),CategoryModule, 
-      //CategoryDetailModule,JobPostModule, JobPostDetailModule,
+      }),
+      CategoryModule, 
+      CategoryDetailModule,
+      JobPostModule, 
+      JobPostDetailModule,
       MongooseModule.forRoot('mongodb://127.0.0.1:27017/UserFiver'),
       //PostModule,
     ],
@@ -58,5 +72,4 @@ export default class AppModule  {// implements NestModule
   //       'cats/(.*)',)
   //     .forRoutes({path: 'posts', method: RequestMethod.GET} ); // .forRoutes(CatsController);
   // }
-
 }

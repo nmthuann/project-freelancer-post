@@ -3,12 +3,17 @@ import { JobPostDetailController } from './jobPostDetail.controller';
 import { JobPostDetailService } from './jobPostDetail.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JobPostDetailEntity } from './jobPostDetail.entity';
+import { JobPostModule } from '../job-post/jobPost.module';
+import { JobPostEntity } from '../job-post/jobPost.entity';
 
-
-//  TypeOrmModule.forFeature([JobPostDetailEntity])
 @Module({
-  imports:[TypeOrmModule.forFeature([JobPostDetailEntity])],
+  imports:[TypeOrmModule.forFeature([JobPostDetailEntity, JobPostEntity]), JobPostModule],
   controllers: [JobPostDetailController],
-  providers: [JobPostDetailService]
+  providers: [
+    {
+      provide: 'IJobPostDetailService',
+      useClass: JobPostDetailService,
+    }, 
+  ]
 })
 export class JobPostDetailModule {}
