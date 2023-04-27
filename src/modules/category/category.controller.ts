@@ -1,9 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put,
      Req, UsePipes, NestMiddleware, HttpCode, HttpStatus, Inject } from '@nestjs/common';
-import { ValidatorPipe } from 'src/common/pipes/validator.pipe';
 import { CategoryDto } from './category-dto/category.dto';
-import { CategoryService } from './category.service';
-import { ICategoryService } from './category.interface';
+import { ICategoryService } from './category.service.interface';
 import { CreateCategoryDto } from './category-dto/create-category.dto';
 
 // working with DTO
@@ -16,8 +14,8 @@ export class CategoryController {
 
     @Post('create')
     // @UsePipes(new ValidatorPipe())
-    async createCategory(@Body() category: CreateCategoryDto): Promise<CreateCategoryDto> {
-        return await this.categoryService.create(category);
+    async createCategory(@Body() category: CategoryDto): Promise<CategoryDto> {
+        return await this.categoryService.createOne(category);
     }
 
     @Put('update/:id')
@@ -28,15 +26,19 @@ export class CategoryController {
     @Delete('delete/:id')
     //@HttpCode(HttpStatus.NO_CONTENT)
     async deleteCategoryById(@Param('id') id: number): Promise<void> {
-        console.log(this.categoryService.deleteOneById(id));
+        console.log(await this.categoryService.deleteOneById(id));
     }
 
     @Get('Categories')
     async getCategories(): Promise<CategoryDto[]> {
-        //console.log(this.categoryService.getCategories())
         return await this.categoryService.getAll();
     }
     
+    @Get('update-test')
+    async updateTest(@Body() category: CategoryDto) {
+        return await this.categoryService.updateCategory(category);
+    }
+
     @Get(':id')
     async getCategory(@Param('id') id: number): Promise<CategoryDto> {
         return await this.categoryService.getOneById(id);

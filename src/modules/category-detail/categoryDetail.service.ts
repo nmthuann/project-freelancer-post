@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 import { CategoryDetailEntity } from './categoryDetail.entity';
@@ -6,18 +6,31 @@ import { CategoryDetailDto } from './category-detail-dto/categoryDetail.dto';
 //import { CategoryDetailRepository } from 'src/common/interfaces/ICategoryDetailRepository'
 import { plainToInstance } from 'class-transformer';
 import { BaseService } from '../bases/base.abstract';
-import { ICategoryDetailService } from './ICategoryDetail.service';
+import { ICategoryDetailService } from './categoryDetail.service.interface';
+import { CreateCategoryDetailDto } from './category-detail-dto/create-categoryDetail.dto';
+import { ICategoryService } from '../category/category.service.interface';
 
 @Injectable()
-export class CategoryDetailService extends BaseService<CategoryDetailDto> implements ICategoryDetailService{
+export class CategoryDetailService 
+  extends BaseService<CategoryDetailDto>
+    implements ICategoryDetailService 
+  {
+
   constructor(
     @InjectRepository(CategoryDetailEntity)
-    private readonly categoryDetailRepository: Repository<CategoryDetailEntity>,
+    private readonly categoryDetailRepository: Repository<CategoryDetailDto>,
+    @Inject('ICategoryService')
+    private readonly categoryService: ICategoryService
   ) {
     super(categoryDetailRepository);
   }
 
-  async getIdByCategoryDetailName(name: string): Promise<number> {
+  async createOne(data: CategoryDetailDto): Promise<CategoryDetailDto> {
+    const findCategory = await this.categoryService.getOneById(data.category.category_id);
+    return await this.categoryDetailRepository.save({...findCategory, ...data});
+  }
+
+  async getIdByCategoryDetailName(name: string) {
       const categoryDetail = await this.categoryDetailRepository.findOneBy({
         category_detail_name: name ,
       });
@@ -25,35 +38,6 @@ export class CategoryDetailService extends BaseService<CategoryDetailDto> implem
       if (!categoryDetail) {
         throw new NotFoundException(`Category detail with name ${name} not found`);
       }
-    
-      return categoryDetail.category_detail_id;
+    return categoryDetail;
   }
 }
-
-
-
-
-    // getCategories(): Promise<CategoryDetailEntity[]> {
-    //     return this.categoryDetailRepository.find();
-    // }
-
-    // getByCategoryDetailId(id: number) {
-    //     return this.categoryDetailRepository.findOneById(id);
-    // }
-      
-    // async createCategoryDetail(categoryDetailDetailDto: CategoryDetailDto): Promise<CategoryDetailDto> {
-    //     return this.categoryDetailRepository.save(categoryDetailDetailDto);
-    // }
-
-    // async updateCategoryDetail(categoryDetailDto: CategoryDetailDto): Promise<CategoryDetailDto>{
-    //     return this.categoryDetailRepository.preload(categoryDetailDto);
-    // }
-
-    // async updateCategoryDetailById(id: number, CategoryDetailDetailDto: CategoryDetailDto){
-    //     const cateUpdate = await this.categoryDetailRepository.findOneById(id);
-    //     return this.categoryDetailRepository.save({...cateUpdate, ...CategoryDetailDetailDto});
-    // }
-
-    // async deleteCategoryDetailById(id: number): Promise<DeleteResult> {
-    //     return this.categoryDetailRepository.softDelete(id);
-    // }

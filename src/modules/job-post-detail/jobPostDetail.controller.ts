@@ -1,53 +1,41 @@
 import { Body, Controller, Delete, Get, Param, Post, Put,
-    Req, UsePipes, NestMiddleware, HttpCode, HttpStatus } from '@nestjs/common';
-//import { JobPostDetailMiddleware } from 'src/middlewares/JobPostDetail.middleware';
-import { TransformPipe } from 'src/common/pipes/tranform.pipe';
-import { ValidatorPipe } from 'src/common/pipes/validator.pipe';
-import { JobPostDetailDto } from './jobPostDetail.dto';
-import { JobPostDetailService } from './jobPostDetail.service';
-import { Request } from 'express';
+    Req, UsePipes, NestMiddleware, HttpCode, HttpStatus, Inject } from '@nestjs/common';
+import { JobPostDetailDto } from './job-post-detail-dto/jobPostDetail.dto';
+import { IJobPostDetailService } from './jobPostDetail.service.interface';
 
 // working with DTO
 @Controller('job-post-detail') 
 export class JobPostDetailController  {
-   constructor(private jobPostDetailService: JobPostDetailService){}
+   constructor(
+    @Inject('IJobPostDetailService')
+    private jobPostDetailService: IJobPostDetailService){}
 
-   @Get('JobPostDetails')
-   async getJobPostDetails(): Promise<JobPostDetailDto[]> {
-       //console.log(this.JobPostDetailService.getCategories())
-       return this.jobPostDetailService.getJobPostDetails();
-   }
-   
-   @Get(':id')
-   async getJobPostDetailById(@Param('id') id: number): Promise<JobPostDetailDto> {
-       return this.jobPostDetailService.getByJobPostDetailId(id);
-   }
+    @Post('create')
+    async createJobPostDetail(@Body() jobPostDetail: JobPostDetailDto): Promise<JobPostDetailDto> {
+       return await this.jobPostDetailService.createOne(jobPostDetail);
+    }
 
-   @Post()
-   @UsePipes(new ValidatorPipe())
-   async createJobPostDetail(@Body() JobPostDetail: JobPostDetailDto): Promise<JobPostDetailDto> {
-       return this.jobPostDetailService.createJobPostDetail(JobPostDetail);
-   }
+    @Put('update/:id')
+    async updateJobPostDetailById(
+    @Param('id') id: number, 
+    @Body() JobPostDetailDto: JobPostDetailDto
+    ): Promise<JobPostDetailDto> {
+       return await this.jobPostDetailService.updateOneById(id, JobPostDetailDto);
+    }
 
-   @Put(':id')
-   async updateJobPostDetailById(@Param('id') id: number, @Body() JobPostDetailDto: JobPostDetailDto,): Promise<JobPostDetailDto> {
-       return this.jobPostDetailService.updateJobPostDetailById(id, JobPostDetailDto);
-   }
-
-   @Delete(':id')
-   @HttpCode(HttpStatus.NO_CONTENT)
+   @Delete('delete/:id')
    async deleteJobPostDetailbyId(@Param('id') id: number): Promise<void> {
-       console.log(this.jobPostDetailService.deleteJobPostDetailById(id));
+       console.log(await this.jobPostDetailService.deleteOneById(id));
    }
-}
 
-
-
-
+    @Get('JobPostDetails')
+    async getJobPostDetails(): Promise<JobPostDetailDto[]> {
+        //console.log(this.JobPostDetailService.getCategories())
+        return await this.jobPostDetailService.getAll();
+    }
    
-   // @Get()
-   // //@NestMiddleware(JobPostDetailMiddleware)
-   // getJobPostDetailById(@Req() req: Request){
-   //     const categories = this.JobPostDetailService.getCategories();
-   //     return { message: 'Success', data: categories};
-   // }
+    @Get(':id')
+    async getJobPostDetailById(@Param('id') id: number): Promise<JobPostDetailDto> {
+        return await this.jobPostDetailService.getOneById(id);
+    }
+}

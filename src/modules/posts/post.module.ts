@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { JobPostDetail, Post, PostSchema } from '../post/post.entity';
-import { PostController } from '../post/post.controller';
-import { PostService } from '../post/post.service';
+import { JobPostDetail, Post, PostSchema } from './post.entity';
+import { PostController } from './post.controller';
+import { PostService } from './post.service';
 import { CategoryDetailService } from '../category-detail/categoryDetail.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CategoryDetailEntity } from '../category-detail/categoryDetail.entity';

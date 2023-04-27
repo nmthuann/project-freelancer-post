@@ -1,23 +1,23 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository } from 'typeorm';
-import { CategoryEntity } from './category.entity';
+import {  Repository } from 'typeorm';
+//import { CategoryEntity } from './category.entity';
 import { CategoryDto } from './category-dto/category.dto';
-import { CreateCategoryDto } from './category-dto/create-category.dto';
-import {ICategoryService } from './category.interface';
+import {ICategoryService } from './category.service.interface';
 import { BaseService } from '../bases/base.abstract';
+import { CategoryEntity } from './category.entity';
 
 @Injectable()
 export class CategoryService extends BaseService<CategoryDto> implements ICategoryService{
   constructor(
     @InjectRepository(CategoryEntity)
-    private readonly categoryRepository: Repository<CategoryEntity>,
+    categoryRepository: Repository<CategoryDto>,
     ) {
         super(categoryRepository);
     }
 
-    updateCategory(id: number, categoryDto: CategoryDto): Promise<CategoryDto> {
-        return this.categoryRepository.preload(categoryDto);
+    updateCategory(categoryDto: CategoryDto) {
+        return `${categoryDto} test updateCategory`;
     }  
 }
 

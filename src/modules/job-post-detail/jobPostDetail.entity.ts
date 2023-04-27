@@ -7,23 +7,18 @@ export class JobPostDetailEntity extends BaseEntity{
     @PrimaryGeneratedColumn()
     job_post_detail_id: number
 
-    @OneToOne(() => JobPostEntity)
-    @JoinColumn()
-    job_post: JobPostEntity
-
-    //@OneToOne(() => ProfileEntity)
-    //@JoinColumn()
     @Column()
-    profile_id: number
+    profile_user: string
 
     @Column()
     description: string
 
-    // @OneToMany(() => PackageEntity, (packages) => packages.package_id)
-    // packages: PackageEntity[]
-
     @Column()
     FAQ: string
+
+    @OneToOne(() => JobPostEntity, (job_post) => job_post.job_post_detail)
+    @JoinColumn()
+    job_post: JobPostEntity
 }
 
 
