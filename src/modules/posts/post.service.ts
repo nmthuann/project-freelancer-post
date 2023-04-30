@@ -1,35 +1,33 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { InjectRepository } from '@nestjs/typeorm';
-import { count } from 'console';
 import { Model } from 'mongoose';
-import { Repository } from 'typeorm';
-import { CategoryDetailEntity } from '../category-detail/categoryDetail.entity';
-import { CategoryDetailService } from '../category-detail/categoryDetail.service';
-import { JobPostDetailDto } from '../job-post-detail/job-post-detail-dto/jobPostDetail.dto';
-import { JobPostDetailEntity } from '../job-post-detail/jobPostDetail.entity';
-import { JobPostDetailService } from '../job-post-detail/jobPostDetail.service';
-import { JobPostDto } from '../job-post/job-post/jobPost.dto';
-import { JobPostEntity } from '../job-post/jobPost.entity';
-import { JobPostService } from '../job-post/jobPost.service';
-import { PackageEntity } from './package/package.entity';
 import { PackageDto } from './post-dto/package.dto';
 //import { Post } from './interfaces/post.interface';
-import {PostDto} from './post-dto/post.dto'
-import { JobPostDetail, Package, Post } from './post.entity';
-import { Update_PostDto } from './post-dto/update-post.dto';
+import { PostDto } from './post-dto/post.dto'
+import { Post } from './post.entity';
+import { UpdatePostDto } from './post-dto/update-post.dto';
+import { IJobPostService } from '../job-post/jobPost.service.interface';
+import { ICategoryDetailService } from '../category-detail/categoryDetail.service.interface';
+import { IJobPostDetailService } from '../job-post-detail/jobPostDetail.service.interface';
+import { CreatePostDetailDto, PostDetailDto } from './post-dto/postDetail.dto';
+import { JobPostDto } from '../job-post/job-post-dto/jobPost.dto';
+import { JobPostDetailDto } from '../job-post-detail/job-post-detail-dto/jobPostDetail.dto';
+import { CategoryDetailDto } from '../category-detail/category-detail-dto/categoryDetail.dto';
 
 @Injectable()
 export class PostService {
   constructor(
-    @InjectModel(Post.name) 
-  private readonly postModel: Model<Post>,
-  private jobPostService: JobPostService,
-  private categoryDetailService: CategoryDetailService,
-  private jobPostDetailService: JobPostDetailService,
+    @InjectModel(Post.name)
+    private readonly postModel: Model<Post>,
+    @Inject('ICategoryDetailService')
+    private categoryDetailService: ICategoryDetailService,
+    @Inject('IJobPostService')
+    private jobPostService: IJobPostService,
+    @Inject('IJobPostDetailService')
+    private jobPostDetailService: IJobPostDetailService,
   ) {}
-  
-  async getPost(): Promise<Post[]>{
+
+  async getPosts(): Promise<Post[]> {
     try {
       const posts = await this.postModel.find();
       return posts;
@@ -38,7 +36,189 @@ export class PostService {
     }
   }
 
-  async CreatePost(postDto: PostDto) {
+  async CreatePost(postDto: PostDto): Promise<PostDto | object> {
+    // Xử lý ở Phía SQL
+    try {
+      
+      // check name category is exsit
+      const getNameCategoryDetail: CategoryDetailDto = 
+      await this.categoryDetailService.getIdByCategoryDetailName(postDto.category_detail_name);
+      console.log("test - getNameCategoryDetail: ", getNameCategoryDetail);
+
+      // NoSQL
+      const newPost = new this.postModel(postDto);
+    //  //newPost.post_id = createdJobPost.job_post_id;
+    //   newPost.post_name = postDto.post_name;
+    //   newPost.category_detail_name = getNameCategoryDetail.category_detail_name;
+    //   //newPost.vote = 0
+    //   //newPost.post_detail = new PostDetailDto()
+    //   newPost.post_detail = {} as any
+    //   newPost.post_detail.profile_user = postDto.post_detail.profile_user
+    //   newPost.post_detail.description = postDto.post_detail.description
+    //   newPost.post_detail.FAQ =  postDto.post_detail.FAQ
+    //   //newPost.post_detail.packages =  
+      
+    //   const obj1 = {
+    //     package_id: postDto.post_detail.packages[0].package_id,
+    //     package_name: postDto.post_detail.packages[0].package_name,
+    //     package_detail: {
+    //       'revision': postDto.post_detail.packages[0].package_detail.revision ,
+    //       'unit_price': postDto.post_detail.packages[0].package_detail.unit_price,
+    //       'delivery_day': postDto.post_detail.packages[0].package_detail.delivery_day
+    //   }};
+    //   //newArray.push(obj1);
+    //    console.log( obj1)
+
+    //   const obj2 = {
+    //     package_id: postDto.post_detail.packages[1].package_id,
+    //     package_name: postDto.post_detail.packages[1].package_name,
+    //     package_detail: {
+    //       'revision': postDto.post_detail.packages[1].package_detail.revision ,
+    //       'unit_price': postDto.post_detail.packages[1].package_detail.unit_price,
+    //       'delivery_day': postDto.post_detail.packages[1].package_detail.delivery_day
+    //   }};
+    //   console.log( obj2)
+    //    //newArray.push(obj2);
+
+    //   const obj3 = {
+    //     package_id: postDto.post_detail.packages[2].package_id,
+    //     package_name: postDto.post_detail.packages[2].package_name,
+    //     package_detail: {
+    //       'revision': postDto.post_detail.packages[2].package_detail.revision ,
+    //       'unit_price': postDto.post_detail.packages[2].package_detail.unit_price,
+    //       'delivery_day': postDto.post_detail.packages[2].package_detail.delivery_day
+    //   }};
+    //   console.log(obj3)
+    //   // newArray.push(obj3);
+      
+
+    //   const newArray : PackageDto[] = [obj1, obj2, obj3]
+     
+      
+    //   console.log(newArray)
+    //   // newPost.post_detail.packages[0] = obj1;
+    //   // newPost.post_detail.packages[1] = obj2;
+    //   // newPost.post_detail.packages[2] = obj3;
+
+    //   newPost.post_detail.packages = newArray;
+
+     
+
+      //console.log("test - savePost: ", savePost)
+
+      const newJobPost = new JobPostDto(
+        getNameCategoryDetail,
+        postDto.post_name,
+      );
+      console.log("test - newJobPost: ", newJobPost);
+
+      const createdJobPost = await this.jobPostService.createOne(newJobPost);
+      console.log("test - createdJobPost: ", createdJobPost)
+      
+
+      const newJobPostDetail = new JobPostDetailDto(
+        createdJobPost,
+        postDto.post_detail.profile_user,
+        postDto.post_detail.description,
+        postDto.post_detail.FAQ
+      );
+      console.log("test - newJobPostDetail: ", newJobPostDetail)
+
+      const createOneJPDetail = await this.jobPostDetailService.createOne(newJobPostDetail);
+      console.log("test - createOneJPDetail: ", createOneJPDetail)  
+      
+      newPost.post_id = createdJobPost.job_post_id;
+       return await newPost.save();
+      
+      //return  {message: "success Post failed"}
+    } catch (error) {
+      return {message: `${error}`};
+    }
+  }
+
+  async updatePost(name: string, postDto: UpdatePostDto): Promise<UpdatePostDto | any> {
+    // /**
+    //  * update theo id
+    //  * check id đó có tồn tại trong document không?
+    //  * nếu tồn tại người sửa có phải chủ ID không?
+    //  * sửa cái thuộc tính sau:   
+    //  * job_post_id: number;
+    //  * job_name: string;
+    //  * categoryDetail: string;
+    //  * vote: number; (KHỒN)
+    //  * job_post_detail:
+    //  * profile_name: string; (KHÔNG)
+    //  * packages: PackageDto[];
+    //  * description: string;
+    //  * FAQ: string;};
+    //  * sửa ngày updated
+    //  * không được sửa id, ....
+    //  *
+    //  * có tồn tại
+    //  * sửa ở 2 phía
+    //  */
+
+    try {
+      const check_post = this.postModel.find(
+        {post_id: postDto.post_id},
+        {profile_user: name});
+      if(!check_post){
+        throw new Error('id hoặc profile không tồn tại !!')
+      }
+      else{
+        // phía SQL
+        // const findJobPost = await this.jobPostService.getOneById(postDto.post_id);
+        // console.log("findJobPost", findJobPost)
+        
+        // const getJobPostDetail = 
+        // await this.jobPostDetailService.getJobPostDetail(findJobPost, name);
+        // console.log("getJobPostDetail", getJobPostDetail)
+
+        // const updateJobPostDetail = new JobPostDetailDto(
+        //   findJobPost,
+        //   name,
+        //   postDto.description,
+        //   postDto.FAQ
+        // )
+        // console.log("updateJobPostDetail", updateJobPostDetail)
+
+        // // update JobPostDetail
+        // await this.jobPostDetailService.updateOneById(
+        //   6, // lỗi
+        //   updateJobPostDetail
+        // )
+
+        // update Package
+        const updatePostDocument = await this.postModel.updateOne(
+          ((await this.postModel.findOne({ post_id: postDto.post_id }))),
+          {packages: postDto.packages}
+        );
+        console.log(updatePostDocument)
+        return await this.postModel.findOne({ post_id: postDto.post_id });
+      }
+    } catch (error) {
+      return {messgae: "update Post failed"}
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     //   // Xử lý ở Phía SQL
     //   const jobPost = new JobPostDto();
@@ -49,7 +229,7 @@ export class PostService {
     //   const job_post_id = (await this.jobPostService.getLastJobPost()).job_post_id +1;
     //   console.log("Job post id:",job_post_id);
     //   await this.jobPostService.createJobPost(jobPost);
-      
+
     //   const jobPostDetail = new JobPostDetailDto();
     //   console.log(" JobPostDetailDto");
     //   jobPostDetail.job_post = (await (this.jobPostService.getJobPostById(job_post_id)));
@@ -97,64 +277,12 @@ export class PostService {
     //     'unitPrice': postDto.job_post_detail.packages[2].packageDetail.unit_price,
     //     'deliveryDay': postDto.job_post_detail.packages[2].packageDetail.deliveryDay
     // }};
-      
-      
+
+
     // createdPost.jobPostDetail.package[0] = obj1;
     // createdPost.jobPostDetail.package[1] = obj2;
     // createdPost.jobPostDetail.package[2] = obj3;
     // console.log( createdPost)
     // console.log("NoSql done! ", createdPost._id)
-    
+
     // return createdPost.save();
-  }
-
-  async UpdatePost(postDto: Update_PostDto): Promise<Update_PostDto | any>{
-    // /**
-    //  * update theo id
-    //  * check id đó có tồn tại trong document không?
-    //  * nếu tồn tại người sửa có phải chủ ID không?
-    //  * sửa cái thuộc tính sau:   
-    //  * job_post_id: number;
-    //  * job_name: string;
-    //  * categoryDetail: string;
-    //  * vote: number; (KHỒN)
-    //  * job_post_detail:
-    //  * profile_name: string; (KHÔNG)
-    //  * packages: PackageDto[];
-    //  * description: string;
-    //  * FAQ: string;};
-    //  * sửa ngày updated
-    //  * không được sửa id, ....
-    //  *
-    //  * có tồn tại
-    //  * sửa ở 2 phía
-    //  */
-   
-    // const check_post = this.postModel.find({jobPostId: postDto.job_post_id},
-    //    {profileName: postDto.job_post_detail.profile_name});
-    // if(!check_post){
-    //   throw new Error('id hoặc profile không tồn tại !!')
-    // }
-    // else{
-      
-    //   // const check_owner = this.postModel.find({jobPostId: postDto.job_post_id},
-    //   //   {profileName: postDto.job_post_detail.profile_name})
-    //   // if (!check_owner){
-    //   //   throw new Error('You arent Owner!!!')
-    //   // }
-    //   // else{
-    //     // phía SQL
-    //     const update_JP = new JobPostDto();
-    //     update_JP.job_post_name = postDto.job_name;
-    //     this.jobPostService.updateJobPost(update_JP);
-
-    //     const update_JPDetail = new JobPostDetailDto();
-    //     update_JPDetail.FAQ = postDto.job_post_detail.FAQ;
-    //     update_JPDetail.description = postDto.job_post_detail.description;
-    //     this.jobPostDetailService.updateJobPostDetail(update_JPDetail);
-
-    //     return await this.postModel.findOneAndUpdate(postDto);
-    //   }
-    //}
-  }
-}

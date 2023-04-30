@@ -1,5 +1,5 @@
 import { Check, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { PackageEntity } from "../package/package.entity";
+import { PackageEntity } from "./package.entity";
 
 @Entity({name:'PackageDetails'})
 export class PackageDetailEntity {

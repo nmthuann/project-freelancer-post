@@ -1,5 +1,5 @@
 import { CategoryDetailDto } from "src/modules/category-detail/category-detail-dto/categoryDetail.dto";
-import { JobPostDto } from "src/modules/job-post/job-post/jobPost.dto";
+import { JobPostDto } from "src/modules/job-post/job-post-dto/jobPost.dto";
 
 export class CreateJobPostDetailDto {
     job_post: JobPostDto

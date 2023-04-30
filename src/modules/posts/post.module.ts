@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { JobPostDetail, Post, PostSchema } from './post.entity';
+import {  Post, PostSchema } from './post.entity';
 import { PostController } from './post.controller';
 import { PostService } from './post.service';
 import { CategoryDetailService } from '../category-detail/categoryDetail.service';
@@ -22,8 +22,26 @@ import { JobPostEntity } from '../job-post/jobPost.entity';
 
 @Module({
   imports: [MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]),
-  TypeOrmModule.forFeature([JobPostDetailEntity, JobPostEntity, CategoryDetailEntity])],
+  TypeOrmModule.forFeature([JobPostDetailEntity, JobPostEntity, CategoryDetailEntity]),
+  CategoryDetailModule,
+  JobPostModule,
+  JobPostDetailModule,
+  ],
   controllers: [PostController, ],
-  providers: [PostService, CategoryDetailService, JobPostDetailService, JobPostService ],
+  providers: [PostService,
+    // {
+    //   provide: 'ICategoryDetailService',
+    //   useClass: CategoryDetailService,
+    // }, 
+    // {
+    //   provide: 'IJobPostService',
+    //   useClass: JobPostService,
+    // }, 
+    // ,
+    // {
+    //   provide: 'IJobPostDetailService',
+    //   useClass: JobPostDetailService,
+    // }, 
+  ],
 })
 export class PostModule {}

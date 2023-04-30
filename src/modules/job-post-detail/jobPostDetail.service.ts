@@ -7,6 +7,7 @@ import { BaseService } from '../bases/base.abstract';
 import { IJobPostDetailService } from './jobPostDetail.service.interface';
 import { IJobPostService } from '../job-post/jobPost.service.interface';
 import { CreateJobPostDetailDto } from './job-post-detail-dto/create-jobPostDetail.dto';
+import { JobPostDto } from '../job-post/job-post-dto/jobPost.dto';
 
 @Injectable()
 export class JobPostDetailService 
@@ -27,5 +28,20 @@ export class JobPostDetailService
         const findJobPost = 
         await this.jobPostService.getOneById(data.job_post.job_post_id);
         return await this.jobPostDetailRepository.save({...findJobPost, ...data});
+    }
+
+    async getJobPostDetail(job_post: JobPostDto, profile_name: string): Promise<JobPostDetailDto | object | any> {
+        // const findJobPost = 
+        // await this.jobPostService.getOneById(job_post.job_post_id);
+        try {
+            const findJobPostDetail = await this.jobPostDetailRepository.findOneBy({
+                job_post: job_post,
+                profile_user: profile_name,
+            })
+            return findJobPostDetail;
+        } catch (error) {
+            return {message: `${error}`}
+        }
+       
     }
 }

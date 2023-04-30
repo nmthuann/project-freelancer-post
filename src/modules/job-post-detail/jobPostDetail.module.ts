@@ -14,6 +14,7 @@ import { JobPostEntity } from '../job-post/jobPost.entity';
       provide: 'IJobPostDetailService',
       useClass: JobPostDetailService,
     }, 
-  ]
+  ],
+  exports: ['IJobPostDetailService']
 })
 export class JobPostDetailModule {}
