@@ -1,8 +1,8 @@
 import { Check, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { PackageDetailEntity } from "../package-detail/packageDetail.entity";
+import { PackageDetailEntity } from "./packageDetail.entity";
 
 @Entity({name:'OrderExtras'})
-class OrderExtraEntity{
+export class OrderExtraEntity{
     @PrimaryGeneratedColumn()
     order_extra_id: number
 

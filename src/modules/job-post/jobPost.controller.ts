@@ -3,11 +3,11 @@ import { Body, Controller, Delete, Get, Param, Post, Put,
 //import { JobPostMiddleware } from 'src/middlewares/JobPost.middleware';
 import { TransformPipe } from 'src/common/pipes/tranform.pipe';
 import { ValidatorPipe } from 'src/common/pipes/validator.pipe';
-import { JobPostDto } from './job-post/jobPost.dto';
+import { JobPostDto } from './job-post-dto/jobPost.dto';
 import { JobPostService } from './jobPost.service';
 import { Request } from 'express';
 import { IJobPostService } from './jobPost.service.interface';
-import { CreateJobPostDto } from './job-post/create-jobPost.dto';
+import { CreateJobPostDto } from './job-post-dto/create-jobPost.dto';
 
 // working with DTO
 @Controller('job-post') 

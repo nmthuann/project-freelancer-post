@@ -12,6 +12,7 @@ import { JobPostEntity } from './modules/job-post/jobPost.entity';
 import { JobPostDetailEntity } from './modules/job-post-detail/jobPostDetail.entity';
 import { JobPostModule } from './modules/job-post/jobPost.module';
 import { JobPostDetailModule } from './modules/job-post-detail/jobPostDetail.module';
+import { PostModule } from './modules/posts/post.module';
 
 @Module({
   imports: [
@@ -51,7 +52,7 @@ import { JobPostDetailModule } from './modules/job-post-detail/jobPostDetail.mod
       JobPostModule, 
       JobPostDetailModule,
       MongooseModule.forRoot('mongodb://127.0.0.1:27017/UserFiver'),
-      //PostModule,
+      PostModule,
     ],
   controllers: [AppController],
   providers: [AppService,

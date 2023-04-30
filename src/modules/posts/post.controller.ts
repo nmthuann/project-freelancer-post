@@ -1,21 +1,26 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param} from '@nestjs/common';
 import { PostService } from './post.service';
 import { PostDto } from './post-dto/post.dto';
-import { JobPostDetailService } from '../job-post-detail/jobPostDetail.service';
-import { JobPostService } from '../job-post/jobPost.service';
-import { InjectRepository } from '@nestjs/typeorm';
-import { JobPostEntity } from '../job-post/jobPost.entity';
-import { Repository } from 'typeorm';
-//import { Post as PostModel } from './interfaces/post.interface';
+import { UpdatePostDto } from './post-dto/update-post.dto';
 
 @Controller('posts')
 export class PostController {
     
   constructor(private readonly postService: PostService,) {}
-  @Post()
+  @Post('create')
   async createPost(@Body() postDto: PostDto){
-    console.log(postDto.job_post_detail.profile_name, "Create Post Controller!")
-    return this.postService.CreatePost(postDto);
+    console.log(postDto.post_detail.profile_user, "Create Post Controller!")
+    return await this.postService.CreatePost(postDto);
+  }
+
+  @Post('update/:name')
+  async updatePost(@Param('name') name: string, @Body() postDto: UpdatePostDto){
+    return await this.postService.updatePost(name, postDto);
+  }
+
+  @Get('post-list')
+  async getPosts(){
+    return await this.postService.getPosts();
   }
 
   // @Get()

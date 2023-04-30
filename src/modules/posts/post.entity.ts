@@ -1,18 +1,18 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-export class PackageDetail  {
+class PackageDetail  {
   @Prop({ required: true })
   revision: string;
 
   @Prop({ required: true })
-  deliveryDay: Date;
+  delivery_day: Date;
 
   @Prop({ required: true })
-  unitPrice: number;
+  unit_price: number;
 }
 
-export class Package {
+class Package {
   @Prop({ required: true })
   package_id: number;
 
@@ -20,36 +20,37 @@ export class Package {
   package_name: string;
 
   @Prop({ required: true })
-  packageDetail: PackageDetail;
+  package_detail: PackageDetail;
 }
 
-export class JobPostDetail {
+class PostDetail {
   @Prop()
-  profileName: string;
+  profile_user: string;
   @Prop()
   description: string;
   @Prop()
   FAQ: string;
-  @Prop({ required: true, type: [Package] })
-  package: Package[];
+  @Prop({ type: [Package] })
+  packages: Package[];
 }
 
 @Schema({ timestamps: true })
 export class Post extends Document {
   @Prop({ required: true })
-  jobPostId: number;
+  post_id: number;
 
   @Prop({ required: true })
-  jobName: string;
+  post_name: string;
 
   @Prop({ required: true })
-  categoryDetailName: string;
+  category_detail_name: string;
 
-  @Prop({ required: true })
+  @Prop({ default: 0 })
   vote: number;
 
   @Prop()
-  jobPostDetail: JobPostDetail;
+  post_detail: PostDetail;
 }
-
 export const PostSchema = SchemaFactory.createForClass(Post);
+
+

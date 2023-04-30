@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 import { JobPostEntity } from './jobPost.entity';
 import { BaseService } from '../bases/base.abstract';
-import { JobPostDto } from './job-post/jobPost.dto';
+import { JobPostDto } from './job-post-dto/jobPost.dto';
 import { IJobPostService } from './jobPost.service.interface';
 import { ICategoryDetailService } from '../category-detail/categoryDetail.service.interface';
 

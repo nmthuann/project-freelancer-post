@@ -30,14 +30,14 @@ export class CategoryDetailService
     return await this.categoryDetailRepository.save({...findCategory, ...data});
   }
 
-  async getIdByCategoryDetailName(name: string) {
+  async getIdByCategoryDetailName(name: string): Promise<CategoryDetailDto> {
+    try {
       const categoryDetail = await this.categoryDetailRepository.findOneBy({
         category_detail_name: name ,
       });
-    
-      if (!categoryDetail) {
-        throw new NotFoundException(`Category detail with name ${name} not found`);
-      }
-    return categoryDetail;
+      return categoryDetail;
+    } catch (error) {
+      throw new NotFoundException(`Category detail with name ${name} not found`);
+    }
   }
 }
