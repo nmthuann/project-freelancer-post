@@ -1,13 +1,11 @@
-import { CategoryDetailDto } from "src/modules/category-detail/category-detail-dto/categoryDetail.dto";
-import { JobPostDetailDto } from "src/modules/job-post-detail/job-post-detail-dto/jobPostDetail.dto";
-// import { CategoryDetailEntity } from "../../category-detail/categoryDetail.entity";
+import { CategoryDetailDto } 
+    from "src/modules/category-detail/category-detail-dto/categoryDetail.dto";
 
 export class JobPostDto {
 
     job_post_id: number;
     category_detail: CategoryDetailDto;
     job_post_name: string;
-    //job_detail: JobPostDetailDto;
     vote: number;
     
     constructor(
@@ -17,6 +15,11 @@ export class JobPostDto {
         this.job_post_name = job_post_name;
         this.category_detail = category_detail;
     }
+}
+
+
+
+//job_detail: JobPostDetailDto;
 
     // toString(){
     //     return JSON.stringify({
@@ -26,4 +29,3 @@ export class JobPostDto {
     //         vote: this.vote
     //     })
     // }
-}

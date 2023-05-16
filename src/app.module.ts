@@ -63,14 +63,5 @@ import { PostModule } from './modules/posts/post.module';
   ],
 })
 
-export default class AppModule  {// implements NestModule
-  // configure(consumer: MiddlewareConsumer) {
-  //   consumer
-  //     .apply(LoggerMiddleware)
-  //     .exclude(
-  //       { path: 'users', method: RequestMethod.GET },
-  //       { path: 'users', method: RequestMethod.POST },
-  //       'cats/(.*)',)
-  //     .forRoutes({path: 'posts', method: RequestMethod.GET} ); // .forRoutes(CatsController);
-  // }
+export default class AppModule  {
 }
