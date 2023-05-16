@@ -1,6 +1,6 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { JobPostEntity } from './jobPost.entity';
 import { BaseService } from '../bases/base.abstract';
 import { JobPostDto } from './job-post-dto/jobPost.dto';
@@ -19,6 +19,7 @@ export class JobPostService extends BaseService<JobPostDto> implements IJobPostS
         super(jobPostRepository);
     }
     
+    //  overidding
     async createOne(data: JobPostDto): Promise<JobPostDto> {
         const findCategoryDetail = 
         await this.categoryDetailService.getOneById(data.category_detail.category_detail_id);

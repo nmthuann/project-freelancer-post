@@ -1,15 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, Put,
-    Req, UsePipes, NestMiddleware, HttpCode, HttpStatus, Inject } from '@nestjs/common';
-//import { JobPostMiddleware } from 'src/middlewares/JobPost.middleware';
-import { TransformPipe } from 'src/common/pipes/tranform.pipe';
-import { ValidatorPipe } from 'src/common/pipes/validator.pipe';
+import { Body, Controller, Delete, Get, Param, Post, Put, Inject } from '@nestjs/common';
 import { JobPostDto } from './job-post-dto/jobPost.dto';
-import { JobPostService } from './jobPost.service';
-import { Request } from 'express';
 import { IJobPostService } from './jobPost.service.interface';
-import { CreateJobPostDto } from './job-post-dto/create-jobPost.dto';
 
-// working with DTO
+//  working with DTO
 @Controller('job-post') 
 export class JobPostController  {
    constructor(

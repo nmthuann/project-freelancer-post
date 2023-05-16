@@ -47,64 +47,7 @@ export class PostService {
 
       // NoSQL
       const newPost = new this.postModel(postDto);
-    //  //newPost.post_id = createdJobPost.job_post_id;
-    //   newPost.post_name = postDto.post_name;
-    //   newPost.category_detail_name = getNameCategoryDetail.category_detail_name;
-    //   //newPost.vote = 0
-    //   //newPost.post_detail = new PostDetailDto()
-    //   newPost.post_detail = {} as any
-    //   newPost.post_detail.profile_user = postDto.post_detail.profile_user
-    //   newPost.post_detail.description = postDto.post_detail.description
-    //   newPost.post_detail.FAQ =  postDto.post_detail.FAQ
-    //   //newPost.post_detail.packages =  
-      
-    //   const obj1 = {
-    //     package_id: postDto.post_detail.packages[0].package_id,
-    //     package_name: postDto.post_detail.packages[0].package_name,
-    //     package_detail: {
-    //       'revision': postDto.post_detail.packages[0].package_detail.revision ,
-    //       'unit_price': postDto.post_detail.packages[0].package_detail.unit_price,
-    //       'delivery_day': postDto.post_detail.packages[0].package_detail.delivery_day
-    //   }};
-    //   //newArray.push(obj1);
-    //    console.log( obj1)
 
-    //   const obj2 = {
-    //     package_id: postDto.post_detail.packages[1].package_id,
-    //     package_name: postDto.post_detail.packages[1].package_name,
-    //     package_detail: {
-    //       'revision': postDto.post_detail.packages[1].package_detail.revision ,
-    //       'unit_price': postDto.post_detail.packages[1].package_detail.unit_price,
-    //       'delivery_day': postDto.post_detail.packages[1].package_detail.delivery_day
-    //   }};
-    //   console.log( obj2)
-    //    //newArray.push(obj2);
-
-    //   const obj3 = {
-    //     package_id: postDto.post_detail.packages[2].package_id,
-    //     package_name: postDto.post_detail.packages[2].package_name,
-    //     package_detail: {
-    //       'revision': postDto.post_detail.packages[2].package_detail.revision ,
-    //       'unit_price': postDto.post_detail.packages[2].package_detail.unit_price,
-    //       'delivery_day': postDto.post_detail.packages[2].package_detail.delivery_day
-    //   }};
-    //   console.log(obj3)
-    //   // newArray.push(obj3);
-      
-
-    //   const newArray : PackageDto[] = [obj1, obj2, obj3]
-     
-      
-    //   console.log(newArray)
-    //   // newPost.post_detail.packages[0] = obj1;
-    //   // newPost.post_detail.packages[1] = obj2;
-    //   // newPost.post_detail.packages[2] = obj3;
-
-    //   newPost.post_detail.packages = newArray;
-
-     
-
-      //console.log("test - savePost: ", savePost)
 
       const newJobPost = new JobPostDto(
         getNameCategoryDetail,
@@ -286,3 +229,66 @@ export class PostService {
     // console.log("NoSql done! ", createdPost._id)
 
     // return createdPost.save();
+
+
+
+
+
+        //  //newPost.post_id = createdJobPost.job_post_id;
+    //   newPost.post_name = postDto.post_name;
+    //   newPost.category_detail_name = getNameCategoryDetail.category_detail_name;
+    //   //newPost.vote = 0
+    //   //newPost.post_detail = new PostDetailDto()
+    //   newPost.post_detail = {} as any
+    //   newPost.post_detail.profile_user = postDto.post_detail.profile_user
+    //   newPost.post_detail.description = postDto.post_detail.description
+    //   newPost.post_detail.FAQ =  postDto.post_detail.FAQ
+    //   //newPost.post_detail.packages =  
+      
+    //   const obj1 = {
+    //     package_id: postDto.post_detail.packages[0].package_id,
+    //     package_name: postDto.post_detail.packages[0].package_name,
+    //     package_detail: {
+    //       'revision': postDto.post_detail.packages[0].package_detail.revision ,
+    //       'unit_price': postDto.post_detail.packages[0].package_detail.unit_price,
+    //       'delivery_day': postDto.post_detail.packages[0].package_detail.delivery_day
+    //   }};
+    //   //newArray.push(obj1);
+    //    console.log( obj1)
+
+    //   const obj2 = {
+    //     package_id: postDto.post_detail.packages[1].package_id,
+    //     package_name: postDto.post_detail.packages[1].package_name,
+    //     package_detail: {
+    //       'revision': postDto.post_detail.packages[1].package_detail.revision ,
+    //       'unit_price': postDto.post_detail.packages[1].package_detail.unit_price,
+    //       'delivery_day': postDto.post_detail.packages[1].package_detail.delivery_day
+    //   }};
+    //   console.log( obj2)
+    //    //newArray.push(obj2);
+
+    //   const obj3 = {
+    //     package_id: postDto.post_detail.packages[2].package_id,
+    //     package_name: postDto.post_detail.packages[2].package_name,
+    //     package_detail: {
+    //       'revision': postDto.post_detail.packages[2].package_detail.revision ,
+    //       'unit_price': postDto.post_detail.packages[2].package_detail.unit_price,
+    //       'delivery_day': postDto.post_detail.packages[2].package_detail.delivery_day
+    //   }};
+    //   console.log(obj3)
+    //   // newArray.push(obj3);
+      
+
+    //   const newArray : PackageDto[] = [obj1, obj2, obj3]
+     
+      
+    //   console.log(newArray)
+    //   // newPost.post_detail.packages[0] = obj1;
+    //   // newPost.post_detail.packages[1] = obj2;
+    //   // newPost.post_detail.packages[2] = obj3;
+
+    //   newPost.post_detail.packages = newArray;
+
+     
+
+      //console.log("test - savePost: ", savePost)
