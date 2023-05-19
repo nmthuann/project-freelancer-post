@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import {  Post, PostSchema } from './post.entity';
 import { PostController } from './post.controller';
@@ -19,16 +19,46 @@ import { JobPostController } from '../job-post/jobPost.controller';
 import { CategoryEntity } from '../category/category.entity';
 import { JobPostDetailEntity } from '../job-post-detail/jobPostDetail.entity';
 import { JobPostEntity } from '../job-post/jobPost.entity';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { KafkaModule } from '../kafka/kafka.module';
+import { PostAuthService } from './post-auth.service';
+import { AuthenticationMiddleware } from 'src/common/middlewares/authentication.middleware';
+import { AdminRoleGuard } from 'src/common/guards/admin.role.guard';
+import { UserRoleGuard } from 'src/common/guards/user.role.guard';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]),
-  TypeOrmModule.forFeature([JobPostDetailEntity, JobPostEntity, CategoryDetailEntity]),
-  CategoryDetailModule,
-  JobPostModule,
-  JobPostDetailModule,
+  imports: [
+    
+    MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]),
+    TypeOrmModule.forFeature([
+      JobPostDetailEntity, 
+      JobPostEntity, 
+      CategoryDetailEntity
+    ]),
+    JwtModule.register({
+          secret: process.env.JWT_SECRET_KEY,
+          signOptions: { expiresIn: 60},
+        }),
+    CategoryDetailModule,
+    JobPostModule,
+    JobPostDetailModule,
+    KafkaModule,
   ],
-  controllers: [PostController, ],
-  providers: [PostService,
+  controllers: [PostController],
+  providers: [
+    PostService,
+    PostAuthService,
+    AdminRoleGuard,
+    UserRoleGuard,
+  ],
+})
+export class PostModule implements NestModule{
+    configure(consumer: MiddlewareConsumer) {
+        consumer.apply(AuthenticationMiddleware)
+        .forRoutes(PostController);
+    }
+}
     // {
     //   provide: 'ICategoryDetailService',
     //   useClass: CategoryDetailService,
@@ -41,7 +71,4 @@ import { JobPostEntity } from '../job-post/jobPost.entity';
     // {
     //   provide: 'IJobPostDetailService',
     //   useClass: JobPostDetailService,
-    // }, 
-  ],
-})
-export class PostModule {}
+    // },

@@ -13,24 +13,25 @@ import { JobPostDetailEntity } from './modules/job-post-detail/jobPostDetail.ent
 import { JobPostModule } from './modules/job-post/jobPost.module';
 import { JobPostDetailModule } from './modules/job-post-detail/jobPostDetail.module';
 import { PostModule } from './modules/posts/post.module';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
-    // ClientsModule.register([
-    //   {
-    //     name: 'USER_SERVICE',
-    //     transport: Transport.KAFKA,
-    //     options: {
-    //       client: {
-    //         clientId: 'auth',
-    //         brokers: ['localhost:9092'],
-    //       },
-    //       consumer: {
-    //         groupId: 'user-consumer'
-    //       }
-    //     }
-    //   },
-    // ]),
+      ClientsModule.register([
+      {
+        name: 'AUTH_SERVICE',
+        transport: Transport.KAFKA,
+        options: {
+          client: {
+            clientId: 'auth-consumer',
+            brokers: ['localhost:9092'],
+          },
+          consumer: {
+            groupId: 'auth-service',
+          },
+        },
+      },
+    ]),
     TypeOrmModule.forRoot(
       {
         type: 'mysql',
