@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { PackageDto } from './post-dto/package.dto';
@@ -13,6 +13,9 @@ import { CreatePostDetailDto, PostDetailDto } from './post-dto/postDetail.dto';
 import { JobPostDto } from '../job-post/job-post-dto/jobPost.dto';
 import { JobPostDetailDto } from '../job-post-detail/job-post-detail-dto/jobPostDetail.dto';
 import { CategoryDetailDto } from '../category-detail/category-detail-dto/categoryDetail.dto';
+import { ClientKafka } from '@nestjs/microservices';
+import { GetUserNameDto } from './post-dto/get-useName.dto';
+import { PostAuthService } from './post-auth.service';
 
 @Injectable()
 export class PostService {
@@ -25,6 +28,8 @@ export class PostService {
     private jobPostService: IJobPostService,
     @Inject('IJobPostDetailService')
     private jobPostDetailService: IJobPostDetailService,
+    // @Inject('AUTH_SERVICE') private readonly authClient: ClientKafka
+    private postApiGatewayService: PostAuthService,
   ) {}
 
   async getPosts(): Promise<Post[]> {
@@ -36,8 +41,21 @@ export class PostService {
     }
   }
 
-  async CreatePost(postDto: PostDto): Promise<PostDto | object> {
-    // Xử lý ở Phía SQL
+  async CreatePost(email: string, postDto: PostDto) {// : Promise<PostDto | object>
+  // freelancerName: string,
+    // this.authClient
+    //   .send('get_user', new GetUserNameDto(postDto.post_detail.profile_user))
+    //   .subscribe(async (freelancer_name: any) => {
+    //      // Xử lý ở Phía SQL
+
+    // })
+
+    const freelancerName = 
+    await this.postApiGatewayService.handleAuthServiceMessage(email);
+    if (freelancerName == 'Fail'){
+      return new HttpException('Create Fail', HttpStatus.NOT_FOUND);
+    }
+
     try {
       
       // check name category is exsit
@@ -61,7 +79,7 @@ export class PostService {
 
       const newJobPostDetail = new JobPostDetailDto(
         createdJobPost,
-        postDto.post_detail.profile_user,
+        freelancerName,
         postDto.post_detail.description,
         postDto.post_detail.FAQ
       );
@@ -77,6 +95,7 @@ export class PostService {
     } catch (error) {
       return {message: `${error}`};
     }
+   
   }
 
   async updatePost(name: string, postDto: UpdatePostDto): Promise<UpdatePostDto | any> {
@@ -143,6 +162,14 @@ export class PostService {
       return {messgae: "update Post failed"}
     }
   }
+
+
+  // onModuleInit() {
+  //   this.authClient.subscribeToResponseOf('get_user');
+  // }
+
+
+
 }
 
 
