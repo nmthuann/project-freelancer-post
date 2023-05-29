@@ -11,6 +11,7 @@ export class CategoryDetailController  {
     @Inject('ICategoryDetailService') 
     private categoryDetailService: ICategoryDetailService){}
 
+    
     @Get('CategoryDetails')
     async getCategoryDetails(): Promise<CategoryDetailDto[]> {
         return await this.categoryDetailService.getAll();
@@ -37,6 +38,12 @@ export class CategoryDetailController  {
     @Delete('delete/:id')
     async deleteCategoryById(@Param('id') id: number): Promise<void> {
         console.log(this.categoryDetailService.deleteOneById(id));
+    }
+
+
+    @Get('category-detail-list/:id')
+    async getCategoryDetailsByCategoryId(@Param('id') category_id: number){
+       return await this.categoryDetailService.getCategoryDetailsByCategoryId(category_id);
     }
 
     @Get('name')

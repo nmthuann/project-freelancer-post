@@ -5,7 +5,7 @@ import { CategoryEntity } from "../category/category.entity"
 import { JobPostEntity } from "../job-post/jobPost.entity"
 
 @Entity({name:'CategoryDetails'})
-export class CategoryDetailEntity extends BaseEntity  { //extends BaseEntity
+export class CategoryDetailEntity extends BaseEntity  { 
     @PrimaryGeneratedColumn()
     category_detail_id: number
 
