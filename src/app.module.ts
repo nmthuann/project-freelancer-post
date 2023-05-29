@@ -31,6 +31,19 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
           },
         },
       },
+      {
+        name: 'ORDER_SERVICE',
+        transport: Transport.KAFKA,
+        options: {
+          client: {
+            clientId: 'order-consumer',
+            brokers: ['localhost:9092'],
+          },
+          consumer: {
+            groupId: 'order-service',
+          },
+        },
+      },
     ]),
     TypeOrmModule.forRoot(
       {

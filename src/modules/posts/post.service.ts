@@ -16,6 +16,9 @@ import { CategoryDetailDto } from '../category-detail/category-detail-dto/catego
 import { ClientKafka } from '@nestjs/microservices';
 import { GetUserNameDto } from './post-dto/get-useName.dto';
 import { PostAuthService } from './post-auth.service';
+import { PostOrderDto } from './post-dto/post-order.dto';
+import { PostCustomDto } from './post-dto/post-custom.dto';
+import { GetPostPriceDto } from './post-dto/get-post-price.dto';
 
 @Injectable()
 export class PostService {
@@ -41,20 +44,68 @@ export class PostService {
     }
   }
 
-  async CreatePost(email: string, postDto: PostDto) {// : Promise<PostDto | object>
-  // freelancerName: string,
-    // this.authClient
-    //   .send('get_user', new GetUserNameDto(postDto.post_detail.profile_user))
-    //   .subscribe(async (freelancer_name: any) => {
-    //      // Xử lý ở Phía SQL
+  async findPostById(postId: number): Promise<PostDto> {
+    const post = await this.postModel.findOne({post_id: postId})
+    return post;
+  }
 
-    // })
+  async getPostByEmail(email: string): Promise<PostDto[]>{
+    const getPostByEmail = await this.postModel.find({'post_detail.profile_user': email});
+    return getPostByEmail;
+  }
 
-    const freelancerName = 
-    await this.postApiGatewayService.handleAuthServiceMessage(email);
-    if (freelancerName == 'Fail'){
-      return new HttpException('Create Fail', HttpStatus.NOT_FOUND);
+
+
+  async getPostsByCategoryDetailId(category_detail_id: number): Promise<PostCustomDto[]> {
+    // const posts = await this.postModel.find();
+    const jobPost = await this.jobPostService.getPostsByCategoryDetailId(category_detail_id);
+    const jobPostIds = jobPost.map(post => post.job_post_id);
+    const posts = await this.postModel.find({ post_id: { $in: jobPostIds } })
+    //.select('post_name category_detail_name vote post_detail.packages.package_detail.unit_price')
+    // .exec();
+        const modifiedPosts = posts.map(post => ({
+      post_id: post.post_id,
+      post_name: post.post_name,
+      price: post.post_detail.packages[0].package_detail.unit_price,
+      description: post.post_detail.description,
+      profile_user: post.post_detail.profile_user
+    }));
+    return modifiedPosts;
+    //return posts;
+  }
+
+  async getPostList(): Promise<PostCustomDto[]> {
+  try {
+    const posts = await this.postModel.find();
+    const modifiedPosts = posts.map(post => ({
+      post_name: post.post_name,
+      price: post.post_detail.packages[0].package_detail.unit_price,
+      description: post.post_detail.description,
+      profile_user: post.post_detail.profile_user
+    }));
+    return modifiedPosts;
+  } catch (err) {
+    throw new Error(`Failed to get posts: ${err}`);
+  }
+}
+
+
+  async getPostForOrder(data: any): Promise<PostOrderDto>{
+    const postOrderDto: PostOrderDto = {
+      post_id: 0,
+      profile_user: 'example@mail.com',
+      total_price: 0.00
     }
+    return postOrderDto
+  }
+
+  async CreatePost(email: string, postDto: PostDto) {// : Promise<PostDto | object>
+
+    // const freelancerName = 
+    // await this.postApiGatewayService.handleAuthServiceMessage(email);
+    // if (freelancerName == 'Fail'){
+    //   return new HttpException('Create Fail', HttpStatus.NOT_FOUND);
+    // }
 
     try {
       
@@ -79,7 +130,7 @@ export class PostService {
 
       const newJobPostDetail = new JobPostDetailDto(
         createdJobPost,
-        freelancerName,
+        email,// await freelancerName,
         postDto.post_detail.description,
         postDto.post_detail.FAQ
       );
@@ -162,13 +213,6 @@ export class PostService {
       return {messgae: "update Post failed"}
     }
   }
-
-
-  // onModuleInit() {
-  //   this.authClient.subscribeToResponseOf('get_user');
-  // }
-
-
 
 }
 

@@ -37,4 +37,10 @@ export class JobPostController  {
     async getJobPostById(@Param('id') id: number): Promise<JobPostDto> {
        return await this.jobPostService.getOneById(id);
     }
+
+
+    @Get('get-posts/:id')
+    async getPostsByCategoryDetailId(@Param('id') id: number): Promise<JobPostDto []> {
+       return await this.jobPostService.getPostsByCategoryDetailId(id);
+    }
 }

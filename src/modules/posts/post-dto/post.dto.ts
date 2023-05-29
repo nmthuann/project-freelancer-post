@@ -15,7 +15,7 @@
 
 export class PackageDetailDto{
     revision: string;
-    delivery_day: Date;
+    delivery_day: number;
     unit_price: number;
 }
 
@@ -33,6 +33,7 @@ export class PostDetailDto{
 }
 
 export class PostDto {
+  post_id: number;
   post_name: string;
   category_detail_name: string;
   vote: number;

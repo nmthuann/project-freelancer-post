@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import {  Post, PostSchema } from './post.entity';
 import { PostController } from './post.controller';
@@ -56,19 +56,11 @@ import { JwtModule } from '@nestjs/jwt';
 export class PostModule implements NestModule{
     configure(consumer: MiddlewareConsumer) {
         consumer.apply(AuthenticationMiddleware)
+        .exclude(
+          { path: 'posts/get-posts', method: RequestMethod.GET },
+          { path: 'posts/get-posts/:id', method: RequestMethod.GET },
+          { path: 'posts/get-post/:id', method: RequestMethod.GET },
+          )
         .forRoutes(PostController);
     }
 }
-    // {
-    //   provide: 'ICategoryDetailService',
-    //   useClass: CategoryDetailService,
-    // }, 
-    // {
-    //   provide: 'IJobPostService',
-    //   useClass: JobPostService,
-    // }, 
-    // ,
-    // {
-    //   provide: 'IJobPostDetailService',
-    //   useClass: JobPostDetailService,
-    // },

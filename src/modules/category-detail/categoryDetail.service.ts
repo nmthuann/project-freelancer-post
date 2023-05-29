@@ -24,6 +24,19 @@ export class CategoryDetailService
   ) {
     super(categoryDetailRepository);
   }
+  getCategoryDetailsByCategoryId(category_id: number) {
+    throw new Error('Method not implemented.');
+  }
+  
+  // async getCategoryDetailsByCategoryId(category_id: number) {
+  // //  const category = await this.categoryRepository.findOne(categoryId, { relations: ["category_detail"] });
+
+  // // if (!category) {
+  // //   throw new Error("Category not found");
+  // // }
+  // // return category.category_detail;
+  // throw 
+  // }
 
   async createOne(data: CategoryDetailDto): Promise<CategoryDetailDto> {
     const findCategory = await this.categoryService.getOneById(data.category.category_id);

@@ -22,6 +22,9 @@ export class JobPostDetailService
     ) {
         super(jobPostDetailRepository);
     }
+    getJobPostDetailList() {
+        throw new Error('Method not implemented.');
+    }
 
     // overriding
     async createOne(data: CreateJobPostDetailDto): Promise<JobPostDetailDto> {

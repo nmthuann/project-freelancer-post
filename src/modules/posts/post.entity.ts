@@ -6,7 +6,7 @@ class PackageDetail  {
   revision: string;
 
   @Prop({ required: true })
-  delivery_day: Date;
+  delivery_day: number;
 
   @Prop({ required: true })
   unit_price: number;

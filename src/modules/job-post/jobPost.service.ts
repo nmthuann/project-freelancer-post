@@ -18,6 +18,15 @@ export class JobPostService extends BaseService<JobPostDto> implements IJobPostS
     ) {
         super(jobPostRepository);
     }
+
+    async getPostsByCategoryDetailId(id: number): Promise<JobPostDto[]> {
+         const jobPosts = await this.jobPostRepository
+        .createQueryBuilder("jobPost")
+        .leftJoinAndSelect("jobPost.category_detail", "category_detail")
+        .where("category_detail.category_detail_id = :id", { id: id })
+        .getMany();
+        return jobPosts;
+    }
     
     //  overidding
     async createOne(data: JobPostDto): Promise<JobPostDto> {
