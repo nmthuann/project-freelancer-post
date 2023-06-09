@@ -33,6 +33,10 @@ export class JobPostDetailService
         return await this.jobPostDetailRepository.save({...findJobPost, ...data});
     }
 
+    // async updateOneById(id: number, data: JobPostDetailDto): Promise<JobPostDetailDto> {
+    //     return 
+    // }
+
     async getJobPostDetail(job_post: JobPostDto, profile_name: string): Promise<JobPostDetailDto | object | any> {
         // const findJobPost = 
         // await this.jobPostService.getOneById(job_post.job_post_id);

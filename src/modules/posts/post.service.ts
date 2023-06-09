@@ -32,7 +32,7 @@ export class PostService {
     @Inject('IJobPostDetailService')
     private jobPostDetailService: IJobPostDetailService,
     // @Inject('AUTH_SERVICE') private readonly authClient: ClientKafka
-    private postApiGatewayService: PostAuthService,
+    // private postApiGatewayService: PostAuthService,
   ) {}
 
   async getPosts(): Promise<Post[]> {
@@ -149,65 +149,70 @@ export class PostService {
    
   }
 
-  async updatePost(name: string, postDto: UpdatePostDto): Promise<UpdatePostDto | any> {
-    // /**
-    //  * update theo id
-    //  * check id đó có tồn tại trong document không?
-    //  * nếu tồn tại người sửa có phải chủ ID không?
-    //  * sửa cái thuộc tính sau:   
-    //  * job_post_id: number;
-    //  * job_name: string;
-    //  * categoryDetail: string;
-    //  * vote: number; (KHỒN)
-    //  * job_post_detail:
-    //  * profile_name: string; (KHÔNG)
-    //  * packages: PackageDto[];
-    //  * description: string;
-    //  * FAQ: string;};
-    //  * sửa ngày updated
-    //  * không được sửa id, ....
-    //  *
-    //  * có tồn tại
-    //  * sửa ở 2 phía
-    //  */
-
+  async updatePost(id:number,  email:string, postDto: PostDto): Promise<PostDto | any> {
     try {
-      const check_post = this.postModel.find(
-        {post_id: postDto.post_id},
-        {profile_user: name});
+      const check_post = this.postModel.findOne({
+        where: {
+          post_id: id,
+          "post_detail.profile_user": email
+        }
+      })
+       
+      console.log("check_post", check_post);
       if(!check_post){
         throw new Error('id hoặc profile không tồn tại !!')
       }
       else{
-        // phía SQL
-        // const findJobPost = await this.jobPostService.getOneById(postDto.post_id);
-        // console.log("findJobPost", findJobPost)
-        
-        // const getJobPostDetail = 
-        // await this.jobPostDetailService.getJobPostDetail(findJobPost, name);
-        // console.log("getJobPostDetail", getJobPostDetail)
 
-        // const updateJobPostDetail = new JobPostDetailDto(
-        //   findJobPost,
-        //   name,
-        //   postDto.description,
-        //   postDto.FAQ
-        // )
-        // console.log("updateJobPostDetail", updateJobPostDetail)
+      //   // check name category is exsit
+      //   const getNameCategoryDetail: CategoryDetailDto = 
+      //   await this.categoryDetailService.getIdByCategoryDetailName(postDto.category_detail_name);
+      //   console.log("test - getNameCategoryDetail: ", getNameCategoryDetail);
 
-        // // update JobPostDetail
-        // await this.jobPostDetailService.updateOneById(
-        //   6, // lỗi
-        //   updateJobPostDetail
-        // )
+
+      //   const newJobPost = new JobPostDto(
+      //     getNameCategoryDetail,
+      //     postDto.post_name,
+      //   );
+      //   console.log("test - newJobPost: ", newJobPost);
+      //   const  updatedJobPost = await this.jobPostService.updateOneById(id, newJobPost);
+      //   console.log("test - createdJobPost: ", updatedJobPost)
+      
+
+      // const newJobPostDetail = new JobPostDetailDto(
+      //   updatedJobPost,
+      //   email,
+      //   postDto.post_detail.description,
+      //   postDto.post_detail.FAQ
+      // );
+      // console.log("test - newJobPostDetail: ", newJobPostDetail)
+
+      // const updatedJPDetail = await this.jobPostDetailService.updateOneById((await this.),newJobPostDetail);
+      // console.log("test - createOneJPDetail: ", createOneJPDetail)  
+      
+      // newPost.post_id = createdJobPost.job_post_id;
 
         // update Package
+        // const updatePostDocument = await this.postModel.findOneAndUpdate(
+        //   ((await this.postModel.findOne({ post_id: id}))),
+          
+        // );
+
+        // var updatePost: PostDto = {
+        //   post_id: 0,
+        //   post_name: '',
+        //   category_detail_name: '',
+        //   vote: 0,
+        //   post_detail: new PostDetailDto
+        // }
+
         const updatePostDocument = await this.postModel.updateOne(
-          ((await this.postModel.findOne({ post_id: postDto.post_id }))),
-          {packages: postDto.packages}
-        );
-        console.log(updatePostDocument)
-        return await this.postModel.findOne({ post_id: postDto.post_id });
+                    (await this.postModel.findOne({ post_id: id})), 
+                    postDto
+                );
+
+        console.log( await this.postModel.findOne({ post_id: id }))
+        return await this.postModel.findOne({ post_id: id });
       }
     } catch (error) {
       return {messgae: "update Post failed"}
@@ -228,7 +233,26 @@ export class PostService {
 
 
 
-
+ // /**
+    //  * update theo id
+    //  * check id đó có tồn tại trong document không?
+    //  * nếu tồn tại người sửa có phải chủ ID không?
+    //  * sửa cái thuộc tính sau:   
+    //  * job_post_id: number;
+    //  * job_name: string;
+    //  * categoryDetail: string;
+    //  * vote: number; (KHỒN)
+    //  * job_post_detail:
+    //  * profile_name: string; (KHÔNG)
+    //  * packages: PackageDto[];
+    //  * description: string;
+    //  * FAQ: string;};
+    //  * sửa ngày updated
+    //  * không được sửa id, ....
+    //  *
+    //  * có tồn tại
+    //  * sửa ở 2 phía
+    //  */
 
 
 
