@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Inject, UseGuards,Request} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Inject, UseGuards,Request, Put} from '@nestjs/common';
 import { PostService } from './post.service';
 import { PostDto } from './post-dto/post.dto';
 import { UpdatePostDto } from './post-dto/update-post.dto';
@@ -18,6 +18,17 @@ export class PostController {
   async createPost(@Request() req: any, @Body() postDto: PostDto){
     const email = req['email'];
     return await this.postService.CreatePost(email, postDto);
+  }
+
+  @UseGuards(UserRoleGuard)
+  @Put('update/:id')
+  async updatePost(
+    @Param('id') id: number, 
+    @Request() req: any, 
+    @Body() postDto: PostDto
+  ): Promise<PostDto>{
+    const email = req['email'];
+    return await this.postService.updatePost(id, email, postDto);
   }
 
   // @Public()
