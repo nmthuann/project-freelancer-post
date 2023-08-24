@@ -75,3 +75,5 @@ Nest is [MIT licensed](LICENSE).
 
 "migrate:down": "ts-node ./node_modules/typeorm/cli.js migration:revert",
     "migration-generate": "yarn run typeorm -- migration:generate",
+
+POST SERVICE IN MICROSERVICE PROJECT.
