@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ProducerService } from '../kafka/producer.service';
-import { ConsumerService } from '../kafka/consumer.service';
+import { ProducerService } from '../../kafka/producer.service';
+import { ConsumerService } from '../../kafka/consumer.service';
 
 
 @Injectable()

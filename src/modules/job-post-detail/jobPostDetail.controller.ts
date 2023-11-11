@@ -6,9 +6,14 @@ import { IJobPostDetailService } from './jobPostDetail.service.interface';
 // working with DTO
 @Controller('job-post-detail') 
 export class JobPostDetailController  {
+
+    
+
    constructor(
     @Inject('IJobPostDetailService')
-    private jobPostDetailService: IJobPostDetailService){}
+    private jobPostDetailService: IJobPostDetailService){
+        
+    }
 
     @Post('create')
     async createJobPostDetail(@Body() jobPostDetail: JobPostDetailDto): Promise<JobPostDetailDto> {

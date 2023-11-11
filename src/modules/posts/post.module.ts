@@ -21,11 +21,12 @@ import { JobPostDetailEntity } from '../job-post-detail/jobPostDetail.entity';
 import { JobPostEntity } from '../job-post/jobPost.entity';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { KafkaModule } from '../kafka/kafka.module';
-import { PostAuthService } from './post-auth.service';
+import { PostAuthService } from './services/post-auth.service';
 import { AuthenticationMiddleware } from 'src/common/middlewares/authentication.middleware';
 import { AdminRoleGuard } from 'src/common/guards/admin.role.guard';
 import { UserRoleGuard } from 'src/common/guards/user.role.guard';
 import { JwtModule } from '@nestjs/jwt';
+import { PostServiceProxy } from './post.service.proxy';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { JwtModule } from '@nestjs/jwt';
     PostAuthService,
     AdminRoleGuard,
     UserRoleGuard,
+    PostServiceProxy
   ],
 })
 export class PostModule implements NestModule{

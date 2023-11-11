@@ -1,23 +1,20 @@
 import { Controller, Get, Post, Body, Param, Inject, UseGuards,Request, Put} from '@nestjs/common';
-import { PostService } from './post.service';
 import { PostDto } from './post-dto/post.dto';
-import { UpdatePostDto } from './post-dto/update-post.dto';
 import { UserRoleGuard } from 'src/common/guards/user.role.guard';
-import { AdminRoleGuard } from 'src/common/guards/admin.role.guard';
-import { Public } from 'src/common/decorators/public.decorator';
+import { PostServiceProxy } from './post.service.proxy';
 
 
 @Controller('posts')
 export class PostController {
   constructor(
-    private readonly postService: PostService,
+    private readonly postService: PostServiceProxy,
   ) {}
 
   @UseGuards(UserRoleGuard)
   @Post('create')
   async createPost(@Request() req: any, @Body() postDto: PostDto){
     const email = req['email'];
-    return await this.postService.CreatePost(email, postDto);
+    return await this.postService.createPost(email, postDto);
   }
 
   @UseGuards(UserRoleGuard)
@@ -55,14 +52,3 @@ export class PostController {
   }
 
 }
-
-
-  // @Get('get-post-list')
-  // async getPostList(){
-  //   return await this.postService.getPostList();
-  // }
-
-  // @Post('update/:name')
-  // async updatePost(@Param('name') name: string, @Body() postDto: UpdatePostDto){
-  //   return await this.postService.updatePost(name, postDto);
-  // }

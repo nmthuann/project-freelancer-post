@@ -1,24 +1,16 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { PackageDto } from './post-dto/package.dto';
-//import { Post } from './interfaces/post.interface';
 import { PostDto } from './post-dto/post.dto'
 import { Post } from './post.entity';
-import { UpdatePostDto } from './post-dto/update-post.dto';
 import { IJobPostService } from '../job-post/jobPost.service.interface';
 import { ICategoryDetailService } from '../category-detail/categoryDetail.service.interface';
 import { IJobPostDetailService } from '../job-post-detail/jobPostDetail.service.interface';
-import { CreatePostDetailDto, PostDetailDto } from './post-dto/postDetail.dto';
 import { JobPostDto } from '../job-post/job-post-dto/jobPost.dto';
 import { JobPostDetailDto } from '../job-post-detail/job-post-detail-dto/jobPostDetail.dto';
 import { CategoryDetailDto } from '../category-detail/category-detail-dto/categoryDetail.dto';
-import { ClientKafka } from '@nestjs/microservices';
-import { GetUserNameDto } from './post-dto/get-useName.dto';
-import { PostAuthService } from './post-auth.service';
 import { PostOrderDto } from './post-dto/post-order.dto';
 import { PostCustomDto } from './post-dto/post-custom.dto';
-import { GetPostPriceDto } from './post-dto/get-post-price.dto';
 
 @Injectable()
 export class PostService {
@@ -31,8 +23,6 @@ export class PostService {
     private jobPostService: IJobPostService,
     @Inject('IJobPostDetailService')
     private jobPostDetailService: IJobPostDetailService,
-    // @Inject('AUTH_SERVICE') private readonly authClient: ClientKafka
-    // private postApiGatewayService: PostAuthService,
   ) {}
 
   async getPosts(): Promise<Post[]> {
@@ -44,62 +34,7 @@ export class PostService {
     }
   }
 
-  async findPostById(postId: number): Promise<PostDto> {
-    const post = await this.postModel.findOne({post_id: postId})
-    return post;
-  }
-
-  async getPostByEmail(email: string): Promise<PostDto[]>{
-    const getPostByEmail = await this.postModel.find({'post_detail.profile_user': email});
-    return getPostByEmail;
-  }
-
-
-
-  async getPostsByCategoryDetailId(category_detail_id: number): Promise<PostCustomDto[]> {
-    // const posts = await this.postModel.find();
-    const jobPost = await this.jobPostService.getPostsByCategoryDetailId(category_detail_id);
-    const jobPostIds = jobPost.map(post => post.job_post_id);
-    const posts = await this.postModel.find({ post_id: { $in: jobPostIds } })
-    //.select('post_name category_detail_name vote post_detail.packages.package_detail.unit_price')
-    // .exec();
-        const modifiedPosts = posts.map(post => ({
-      post_id: post.post_id,
-      post_name: post.post_name,
-      price: post.post_detail.packages[0].package_detail.unit_price,
-      description: post.post_detail.description,
-      profile_user: post.post_detail.profile_user
-    }));
-    return modifiedPosts;
-    //return posts;
-  }
-
-  async getPostList(): Promise<PostCustomDto[]> {
-  try {
-    const posts = await this.postModel.find();
-    const modifiedPosts = posts.map(post => ({
-      post_name: post.post_name,
-      price: post.post_detail.packages[0].package_detail.unit_price,
-      description: post.post_detail.description,
-      profile_user: post.post_detail.profile_user
-    }));
-    return modifiedPosts;
-  } catch (err) {
-    throw new Error(`Failed to get posts: ${err}`);
-  }
-}
-
-
-  async getPostForOrder(data: any): Promise<PostOrderDto>{
-    const postOrderDto: PostOrderDto = {
-      post_id: 0,
-      profile_user: 'example@mail.com',
-      total_price: 0.00
-    }
-    return postOrderDto
-  }
-
-  async CreatePost(email: string, postDto: PostDto) {// : Promise<PostDto | object>
+  async createPost(email: string, postDto: PostDto): Promise<PostDto| any> {
 
     // const freelancerName = 
     // await this.postApiGatewayService.handleAuthServiceMessage(email);
@@ -149,6 +84,60 @@ export class PostService {
    
   }
 
+  async findPostById(postId: number): Promise<PostDto> {
+    const post = await this.postModel.findOne({post_id: postId})
+    return post;
+  }
+
+  async getPostByEmail(email: string): Promise<PostDto[]>{
+    const getPostByEmail = await this.postModel.find({'post_detail.profile_user': email});
+    return getPostByEmail;
+  }
+
+  async getPostsByCategoryDetailId(category_detail_id: number): Promise<PostCustomDto[]> {
+    // const posts = await this.postModel.find();
+    const jobPost = await this.jobPostService.getPostsByCategoryDetailId(category_detail_id);
+    const jobPostIds = jobPost.map(post => post.job_post_id);
+    const posts = await this.postModel.find({ post_id: { $in: jobPostIds } })
+    //.select('post_name category_detail_name vote post_detail.packages.package_detail.unit_price')
+    // .exec();
+        const modifiedPosts = posts.map(post => ({
+      post_id: post.post_id,
+      post_name: post.post_name,
+      price: post.post_detail.packages[0].package_detail.unit_price,
+      description: post.post_detail.description,
+      profile_user: post.post_detail.profile_user
+    }));
+    return modifiedPosts;
+    //return posts;
+  }
+
+  async getPostList(): Promise<PostCustomDto[]> {
+  try {
+    const posts = await this.postModel.find();
+    const modifiedPosts = posts.map(post => ({
+      post_name: post.post_name,
+      price: post.post_detail.packages[0].package_detail.unit_price,
+      description: post.post_detail.description,
+      profile_user: post.post_detail.profile_user
+    }));
+    return modifiedPosts;
+  } catch (err) {
+    throw new Error(`Failed to get posts: ${err}`);
+  }
+}
+
+  async getPostForOrder(data: any): Promise<PostOrderDto>{
+    const postOrderDto: PostOrderDto = {
+      post_id: 0,
+      profile_user: 'example@mail.com',
+      total_price: 0.00
+    }
+    return postOrderDto;
+  }
+
+
+
   async updatePost(id:number,  email:string, postDto: PostDto): Promise<PostDto | any> {
     try {
       const check_post = this.postModel.findOne({
@@ -163,49 +152,6 @@ export class PostService {
         throw new Error('id hoặc profile không tồn tại !!')
       }
       else{
-
-      //   // check name category is exsit
-      //   const getNameCategoryDetail: CategoryDetailDto = 
-      //   await this.categoryDetailService.getIdByCategoryDetailName(postDto.category_detail_name);
-      //   console.log("test - getNameCategoryDetail: ", getNameCategoryDetail);
-
-
-      //   const newJobPost = new JobPostDto(
-      //     getNameCategoryDetail,
-      //     postDto.post_name,
-      //   );
-      //   console.log("test - newJobPost: ", newJobPost);
-      //   const  updatedJobPost = await this.jobPostService.updateOneById(id, newJobPost);
-      //   console.log("test - createdJobPost: ", updatedJobPost)
-      
-
-      // const newJobPostDetail = new JobPostDetailDto(
-      //   updatedJobPost,
-      //   email,
-      //   postDto.post_detail.description,
-      //   postDto.post_detail.FAQ
-      // );
-      // console.log("test - newJobPostDetail: ", newJobPostDetail)
-
-      // const updatedJPDetail = await this.jobPostDetailService.updateOneById((await this.),newJobPostDetail);
-      // console.log("test - createOneJPDetail: ", createOneJPDetail)  
-      
-      // newPost.post_id = createdJobPost.job_post_id;
-
-        // update Package
-        // const updatePostDocument = await this.postModel.findOneAndUpdate(
-        //   ((await this.postModel.findOne({ post_id: id}))),
-          
-        // );
-
-        // var updatePost: PostDto = {
-        //   post_id: 0,
-        //   post_name: '',
-        //   category_detail_name: '',
-        //   vote: 0,
-        //   post_detail: new PostDetailDto
-        // }
-
         const updatePostDocument = await this.postModel.updateOne(
                     (await this.postModel.findOne({ post_id: id})), 
                     postDto
@@ -253,7 +199,49 @@ export class PostService {
     //  * có tồn tại
     //  * sửa ở 2 phía
     //  */
+    
 
+    //   // check name category is exsit
+      //   const getNameCategoryDetail: CategoryDetailDto = 
+      //   await this.categoryDetailService.getIdByCategoryDetailName(postDto.category_detail_name);
+      //   console.log("test - getNameCategoryDetail: ", getNameCategoryDetail);
+
+
+      //   const newJobPost = new JobPostDto(
+      //     getNameCategoryDetail,
+      //     postDto.post_name,
+      //   );
+      //   console.log("test - newJobPost: ", newJobPost);
+      //   const  updatedJobPost = await this.jobPostService.updateOneById(id, newJobPost);
+      //   console.log("test - createdJobPost: ", updatedJobPost)
+      
+
+      // const newJobPostDetail = new JobPostDetailDto(
+      //   updatedJobPost,
+      //   email,
+      //   postDto.post_detail.description,
+      //   postDto.post_detail.FAQ
+      // );
+      // console.log("test - newJobPostDetail: ", newJobPostDetail)
+
+      // const updatedJPDetail = await this.jobPostDetailService.updateOneById((await this.),newJobPostDetail);
+      // console.log("test - createOneJPDetail: ", createOneJPDetail)  
+      
+      // newPost.post_id = createdJobPost.job_post_id;
+
+        // update Package
+        // const updatePostDocument = await this.postModel.findOneAndUpdate(
+        //   ((await this.postModel.findOne({ post_id: id}))),
+          
+        // );
+
+        // var updatePost: PostDto = {
+        //   post_id: 0,
+        //   post_name: '',
+        //   category_detail_name: '',
+        //   vote: 0,
+        //   post_detail: new PostDetailDto
+        // }
 
 
 
