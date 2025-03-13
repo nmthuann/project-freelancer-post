@@ -1,8 +1,7 @@
-import { IBaseService } from "../bases/base.interface";
-import { CategoryDto } from "./category-dto/category.dto";
+import { IBaseService } from '../../common/bases/base.interface';
+import { CategoryDto } from './dtos/category.dto';
 
-export interface ICategoryService extends IBaseService<CategoryDto>{
-    updateCategory(categoryDto: CategoryDto): any;
-    getCategoryNameList(): any;
-    getCategoryDetailByCategoryId(category_id: number);
+export interface ICategoryService extends IBaseService<CategoryDto> {
+  getCategoryNameList(): any;
+  getCategoryDetailByCategoryId(category_id: number);
 }

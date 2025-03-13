@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-class PackageDetail  {
+class PackageDetail {
   @Prop({ required: true })
   revision: string;
 
@@ -52,5 +52,3 @@ export class Post extends Document {
   post_detail: PostDetail;
 }
 export const PostSchema = SchemaFactory.createForClass(Post);
-
-
